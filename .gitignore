@@ -1,0 +1,12 @@
+# Instructions Claude (contexte projet, ne doit pas être public)
+/claude.md
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+
+claude.md
