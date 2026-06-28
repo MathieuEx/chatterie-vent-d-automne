@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Cormorant_Garamond, Fraunces, Montserrat } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
@@ -11,10 +11,17 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
 });
 
-const jost = Jost({
+const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: ["300", "400", "500", "600"],
   variable: "--font-sans",
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-logo",
 });
 
 export const metadata: Metadata = {
@@ -29,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${cormorant.variable} ${jost.variable}`}>
+    <html lang="fr" className={`${cormorant.variable} ${montserrat.variable} ${fraunces.variable}`}>
       <body>
         <Navbar />
         <main>{children}</main>

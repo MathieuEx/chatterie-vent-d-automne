@@ -13,7 +13,7 @@ export default async function NosChatonsPage() {
   const litters = await getLitters();
 
   return (
-    <div className="bg-gradient-kittens" style={{ paddingTop: "8rem", minHeight: "60vh" }}>
+    <section className="bg-gradient-kittens" style={{ paddingTop: "8rem", minHeight: "60vh" }}>
       <div className="container">
         <p className="section-label" style={{ justifyContent: "center" }}>
           Disponibilités
@@ -47,6 +47,6 @@ export default async function NosChatonsPage() {
           </p>
         )}
       </div>
-    </div>
+    </section>
   );
 }

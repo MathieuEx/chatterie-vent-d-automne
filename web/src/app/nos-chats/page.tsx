@@ -15,7 +15,7 @@ export default async function NosChatsPage() {
   const femelles = cats.filter((cat) => cat.role === "femelle");
 
   return (
-    <div className="bg-cream" style={{ paddingTop: "8rem" }}>
+    <section className="bg-cream" style={{ paddingTop: "8rem" }}>
       <div className="container">
         <p className="section-label" style={{ justifyContent: "center" }}>
           Nos reproducteurs
@@ -66,6 +66,6 @@ export default async function NosChatsPage() {
           <p className="body-text-sm">Aucune femelle référencée pour le moment.</p>
         )}
       </div>
-    </div>
+    </section>
   );
 }

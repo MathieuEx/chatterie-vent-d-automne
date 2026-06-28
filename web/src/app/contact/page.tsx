@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="bg-cream-dark" style={{ paddingTop: "8rem", minHeight: "60vh" }}>
+    <section className="bg-cream-dark" style={{ paddingTop: "8rem", minHeight: "60vh" }}>
       <div className="container">
         <p className="section-label" style={{ justifyContent: "center" }}>
           Restons en contact
@@ -21,15 +21,7 @@ export default function ContactPage() {
           d&apos;attente ? Écrivez-nous.
         </p>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1.4fr",
-            gap: "3rem",
-            marginTop: "3rem",
-            alignItems: "start",
-          }}
-        >
+        <div className="split-grid split-grid--contact" style={{ marginTop: "3rem" }}>
           <div>
             <div className="contact-info-item">
               <span className="contact-info-item__icon">📍</span>
@@ -72,6 +64,6 @@ export default function ContactPage() {
           <ContactForm />
         </div>
       </div>
-    </div>
+    </section>
   );
 }

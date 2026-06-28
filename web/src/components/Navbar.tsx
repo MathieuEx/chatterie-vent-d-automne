@@ -13,6 +13,7 @@ const links = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -21,9 +22,18 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
-      <Link href="/" className="navbar__logo">
+      <Link href="/" className="navbar__logo" onClick={closeMenu}>
         <Image
           src="/logo.jpg"
           alt="La Chatterie des Vents d'Automne"
@@ -33,16 +43,27 @@ export default function Navbar() {
           priority
         />
       </Link>
-      <nav className="navbar__links">
+      <nav className={`navbar__links ${menuOpen ? "navbar__links--open" : ""}`}>
         {links.map((link) => (
-          <Link key={link.href} href={link.href} className="navbar__link">
+          <Link key={link.href} href={link.href} className="navbar__link" onClick={closeMenu}>
             {link.label}
           </Link>
         ))}
-        <Link href="/contact" className="navbar__link navbar__cta">
+        <Link href="/contact" className="navbar__link navbar__cta" onClick={closeMenu}>
           Nous contacter
         </Link>
       </nav>
+      <button
+        type="button"
+        className={`navbar__burger ${menuOpen ? "navbar__burger--open" : ""}`}
+        onClick={() => setMenuOpen((open) => !open)}
+        aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+        aria-expanded={menuOpen}
+      >
+        <span className="navbar__burger-line" />
+        <span className="navbar__burger-line" />
+        <span className="navbar__burger-line" />
+      </button>
     </header>
   );
 }

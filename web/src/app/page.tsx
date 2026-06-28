@@ -131,22 +131,14 @@ export default async function Home() {
       </section>
 
       <section className="bg-cream-dark" id="about">
-        <div
-          className="container"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5rem",
-            alignItems: "center",
-          }}
-        >
+        <div className="container split-grid">
           <div style={{ position: "relative" }}>
             <div
               className="about-image"
               style={
                 siteSettings?.aboutPhoto
                   ? undefined
-                  : { background: "linear-gradient(135deg, #D4BFB4 0%, #C5A89A 50%, #B8957E 100%)" }
+                  : { background: "linear-gradient(135deg, #DBC19E 0%, #C89C63 50%, #B67D45 100%)" }
               }
             >
               {siteSettings?.aboutPhoto && (
@@ -249,15 +241,7 @@ export default async function Home() {
       </section>
 
       <section className="bg-cream-dark" id="standards">
-        <div
-          className="container"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5rem",
-            alignItems: "center",
-          }}
-        >
+        <div className="container split-grid">
           <div>
             <p className="section-label">Nos engagements qualité</p>
             <h2 className="title-section">
