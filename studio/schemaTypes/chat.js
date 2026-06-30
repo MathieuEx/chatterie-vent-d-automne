@@ -13,6 +13,23 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description: 'Utilisé dans l\'URL de la page du chat. Cliquez sur "Generate" puis "Publish".',
+      options: {
+        source: 'name',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      description: 'Présentation détaillée affichée sur la page du chat (caractère, histoire, etc.)',
+    }),
+    defineField({
       name: 'colorCode',
       title: 'Robe',
       type: 'string',
@@ -71,6 +88,19 @@ export default defineType({
         hotspot: true,
       },
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'gallery',
+      title: 'Galerie photos',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+        },
+      ],
     }),
   ],
   preview: {

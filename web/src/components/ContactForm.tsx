@@ -4,10 +4,6 @@ import { useState, type SubmitEvent } from "react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-function encode(data: FormData) {
-  return new URLSearchParams(data as unknown as Record<string, string>).toString();
-}
-
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
 
@@ -15,14 +11,14 @@ export default function ContactForm() {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const data = new FormData(form);
+    const data = Object.fromEntries(new FormData(form).entries());
 
     setStatus("submitting");
     try {
-      const res = await fetch("/", {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encode(data),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
       if (res.ok) {
         setStatus("success");
@@ -36,15 +32,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form
-      name="contact"
-      method="POST"
-      data-netlify="true"
-      netlify-honeypot="bot-field"
-      onSubmit={handleSubmit}
-      className="contact-form"
-    >
-      <input type="hidden" name="form-name" value="contact" />
+    <form name="contact" onSubmit={handleSubmit} className="contact-form">
       <p style={{ position: "absolute", left: "-9999px", width: 0, height: 0, opacity: 0 }}>
         <label>
           Ne pas remplir si vous êtes humain : <input name="bot-field" tabIndex={-1} autoComplete="off" />

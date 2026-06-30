@@ -5,8 +5,16 @@ import type { Metadata } from "next";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Nos Chats | La Chatterie des Vents d'Automne",
-  description: "Découvrez nos chats reproducteurs Ragdoll, mâles et femelles.",
+  title: "Nos Chats Ragdoll à Toulouse | La Chatterie des Vents d'Automne",
+  description:
+    "Découvrez nos chats reproducteurs Ragdoll à Toulouse, mâles et femelles, testés HCM, PKD, FIV et FeLV négatifs.",
+  alternates: { canonical: "/nos-chats" },
+  openGraph: {
+    title: "Nos Chats Ragdoll à Toulouse | La Chatterie des Vents d'Automne",
+    description:
+      "Découvrez nos chats reproducteurs Ragdoll à Toulouse, mâles et femelles, testés HCM, PKD, FIV et FeLV négatifs.",
+    url: "/nos-chats",
+  },
 };
 
 export default async function NosChatsPage() {
@@ -21,11 +29,11 @@ export default async function NosChatsPage() {
           Nos reproducteurs
         </p>
         <h1 className="title-hero" style={{ textAlign: "center", fontSize: "clamp(2.4rem, 4vw, 3.5rem)" }}>
-          Nos <em>Chats</em>
+          Nos <em>Chats</em> Ragdoll
         </h1>
         <p className="body-text" style={{ margin: "0 auto", textAlign: "center" }}>
-          Nos reproducteurs sont sélectionnés pour leur santé, leur tempérament et la beauté de
-          leur lignée.
+          Nos reproducteurs Ragdoll, basés à Toulouse, sont sélectionnés pour leur santé, leur
+          tempérament et la beauté de leur lignée.
         </p>
 
         <h2 className="title-section" style={{ marginTop: "4rem" }}>

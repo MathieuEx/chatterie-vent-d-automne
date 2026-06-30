@@ -1,18 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getLatestLitter, getGalleryImages, getSiteSettings, getCats } from "@/lib/sanity/queries";
+import {
+  getLatestLitter,
+  getGalleryImages,
+  getSiteSettings,
+  getCats,
+  getTestimonials,
+} from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import LitterCard from "@/components/LitterCard";
 import CatCard from "@/components/CatCard";
+import TestimonialCard from "@/components/TestimonialCard";
+import Hero from "@/components/Hero";
 
 export const revalidate = 3600;
-
-const STATS = [
-  { value: "3 ans", label: "d'expérience" },
-  { value: "33", label: "chatons adoptés" },
-  { value: "5/5", label: "Google" },
-  { value: "4.7/5", label: "Facebook" },
-];
 
 const VALUES = [
   {
@@ -89,46 +90,18 @@ const PROCESS_STEPS = [
 ];
 
 export default async function Home() {
-  const [latestLitter, galleryImages, siteSettings, cats] = await Promise.all([
+  const [latestLitter, galleryImages, siteSettings, cats, testimonials] = await Promise.all([
     getLatestLitter(),
     getGalleryImages(6),
     getSiteSettings(),
     getCats(),
+    getTestimonials(6),
   ]);
   const featuredCats = cats.filter((cat) => cat.status === "actif").slice(0, 3);
 
   return (
     <div>
-      <section className="hero">
-        <div className="hero__bg" />
-        <div className="hero__pattern" />
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <span className="badge-hero">Toulouse · Ragdoll</span>
-          <h1 className="title-hero">
-            La Chatterie des <em>Vents d&apos;Automne</em>
-          </h1>
-          <p className="body-text">
-            Élevage familial passionné, dédié aux chats Ragdoll. Des chatons choyés, en
-            parfaite santé, élevés sous le pied de la maison.
-          </p>
-          <div style={{ display: "flex", gap: "1.25rem", marginTop: "2rem", flexWrap: "wrap" }}>
-            <Link href="/nos-chatons" className="btn-primary">
-              Voir nos chatons disponibles
-            </Link>
-            <Link href="/contact" className="btn-secondary">
-              Nous contacter →
-            </Link>
-          </div>
-          <div className="hero-stats">
-            {STATS.map((stat) => (
-              <div key={stat.label}>
-                <p className="hero-stats__num">{stat.value}</p>
-                <p className="hero-stats__label">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       <section className="bg-cream-dark" id="about">
         <div className="container split-grid">
@@ -291,6 +264,29 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {testimonials.length > 0 && (
+        <section className="bg-cream-dark" id="avis">
+          <div className="container">
+            <p className="section-label">Avis de nos familles</p>
+            <h2 className="title-section">
+              Ce qu&apos;ils disent de <em>nous</em>
+            </h2>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gap: "var(--gap-cards)",
+                marginTop: "2.5rem",
+              }}
+            >
+              {testimonials.map((testimonial, i) => (
+                <TestimonialCard key={testimonial._id} testimonial={testimonial} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="bg-cream" id="gallery">
         <div className="container">

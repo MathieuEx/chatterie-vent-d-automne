@@ -20,6 +20,7 @@ export default function Footer() {
             <div className="footer__links">
               <Link href="/nos-chats">Nos Chats</Link>
               <Link href="/nos-chatons">Nos Chatons</Link>
+              <Link href="/faq">FAQ</Link>
               <Link href="/contact">Contact</Link>
             </div>
           </div>

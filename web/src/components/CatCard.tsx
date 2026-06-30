@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { motion } from "motion/react";
 import { urlFor } from "@/lib/sanity/image";
 import type { Cat } from "@/lib/sanity/types";
 
@@ -10,8 +14,15 @@ const ROLE_BADGE: Record<Cat["role"], { label: string; className: string }> = {
 export default function CatCard({ cat }: { cat: Cat }) {
   const roleBadge = ROLE_BADGE[cat.role];
 
-  return (
-    <article className="cat-card">
+  const card = (
+    <motion.article
+      className="cat-card"
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      whileHover={{ scale: 1.02, boxShadow: "var(--shadow-card-hover)" }}
+    >
       <div className="cat-card__image">
         <Image
           src={urlFor(cat.photo).width(480).height(320).url()}
@@ -35,6 +46,16 @@ export default function CatCard({ cat }: { cat: Cat }) {
         {cat.geneticData && <p className="body-text-sm">{cat.geneticData}</p>}
         {cat.tests && <p className="body-text-sm" style={{ color: "var(--sage)" }}>✓ {cat.tests}</p>}
       </div>
-    </article>
+    </motion.article>
+  );
+
+  if (!cat.slug?.current) {
+    return card;
+  }
+
+  return (
+    <Link href={`/nos-chats/${cat.slug.current}`} className="card-link">
+      {card}
+    </Link>
   );
 }

@@ -2,8 +2,16 @@ import ContactForm from "@/components/ContactForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact | La Chatterie des Vents d'Automne",
-  description: "Contactez La Chatterie des Vents d'Automne pour toute question ou réservation.",
+  title: "Contact | La Chatterie des Vents d'Automne - Ragdoll Toulouse",
+  description:
+    "Contactez La Chatterie des Vents d'Automne, élevage de Ragdoll à Toulouse, pour toute question ou réservation.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact | La Chatterie des Vents d'Automne - Ragdoll Toulouse",
+    description:
+      "Contactez La Chatterie des Vents d'Automne, élevage de Ragdoll à Toulouse, pour toute question ou réservation.",
+    url: "/contact",
+  },
 };
 
 export default function ContactPage() {
@@ -17,8 +25,8 @@ export default function ContactPage() {
           <em>Contact</em>
         </h1>
         <p className="body-text" style={{ margin: "0 auto", textAlign: "center" }}>
-          Une question sur nos chats, une portée à venir, ou envie de rejoindre la liste
-          d&apos;attente ? Écrivez-nous.
+          Une question sur nos chats Ragdoll à Toulouse, une portée à venir, ou envie de
+          rejoindre la liste d&apos;attente ? Écrivez-nous.
         </p>
 
         <div className="split-grid split-grid--contact" style={{ marginTop: "3rem" }}>

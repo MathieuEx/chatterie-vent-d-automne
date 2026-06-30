@@ -8,6 +8,7 @@ const links = [
   { href: "/", label: "Accueil" },
   { href: "/nos-chats", label: "Nos Chats" },
   { href: "/nos-chatons", label: "Nos Chatons" },
+  { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -35,10 +36,10 @@ export default function Navbar() {
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <Link href="/" className="navbar__logo" onClick={closeMenu}>
         <Image
-          src="/logo.jpg"
+          src="/logo.png"
           alt="La Chatterie des Vents d'Automne"
-          width={52}
-          height={52}
+          width={100}
+          height={100}
           className="navbar__logo-img"
           priority
         />

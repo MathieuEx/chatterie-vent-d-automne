@@ -240,6 +240,8 @@ section {
 }
 .navbar__logo span { color: var(--terracotta); }
 .navbar__logo-img {
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -425,6 +427,12 @@ section {
    9. CARTES — REPRODUCTEURS
    ────────────────────────────────────────────── */
 
+.card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
 .cat-card {
   background: white;
   border-radius: var(--radius-lg);
@@ -432,10 +440,7 @@ section {
   box-shadow: var(--shadow-card);
   transition: transform var(--transition-card), box-shadow var(--transition-card);
 }
-.cat-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-card-hover);
-}
+/* Lift/shadow handled by framer-motion's whileHover on CatCard */
 
 .cat-card__image {
   width: 100%;
@@ -476,7 +481,7 @@ section {
   box-shadow: 0 2px 12px rgba(90, 55, 31, 0.07);
   transition: transform var(--transition-card);
 }
-.kitten-card:hover { transform: translateY(-4px); }
+/* Lift/shadow handled by framer-motion's whileHover on LitterCard */
 
 .kitten-card__image {
   width: 100%;
@@ -1022,6 +1027,93 @@ section {
 
 
 /* ──────────────────────────────────────────────
+   17b. FAQ — ACCORDÉON
+   ────────────────────────────────────────────── */
+
+.faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.faq-item {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.faq-item__question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--warm-brown);
+}
+
+.faq-item__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--rose-light);
+  color: var(--terracotta);
+  transition: transform var(--transition-base), background var(--transition-base), color var(--transition-base);
+}
+.faq-item__icon::before,
+.faq-item__icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: currentColor;
+  border-radius: 1px;
+  transform: translate(-50%, -50%);
+}
+.faq-item__icon::before {
+  width: 12px;
+  height: 2px;
+}
+.faq-item__icon::after {
+  width: 2px;
+  height: 12px;
+}
+.faq-item--open .faq-item__icon {
+  transform: rotate(45deg);
+  background: var(--terracotta);
+  color: white;
+}
+
+.faq-item__answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--transition-slow);
+}
+.faq-item--open .faq-item__answer {
+  grid-template-rows: 1fr;
+}
+
+.faq-item__answer-inner {
+  overflow: hidden;
+}
+.faq-item__answer-inner p {
+  padding: 0 1.5rem 1.5rem;
+  margin: 0;
+  max-width: none;
+}
+
+
+/* ──────────────────────────────────────────────
    18. FOOTER
    ────────────────────────────────────────────── */
 
@@ -1165,6 +1257,7 @@ section {
   section { padding: var(--section-padding-mobile); }
   .navbar  { padding: 1rem 1.5rem; }
   .navbar__burger { display: flex; }
+  .navbar__logo-img { width: 72px; height: 72px; }
 
   .navbar__links {
     position: fixed;

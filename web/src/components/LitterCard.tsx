@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { motion } from "motion/react";
 import { urlFor } from "@/lib/sanity/image";
 import StatusBadge from "@/components/StatusBadge";
 import type { Litter } from "@/lib/sanity/types";
@@ -11,8 +15,15 @@ export default function LitterCard({ litter }: { litter: Litter }) {
     year: "numeric",
   }).format(new Date(litter.birthDate));
 
-  return (
-    <article className="kitten-card">
+  const card = (
+    <motion.article
+      className="kitten-card"
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      whileHover={{ scale: 1.02, boxShadow: "var(--shadow-card-hover)" }}
+    >
       <div className="kitten-card__image">
         {cover && (
           <Image
@@ -42,6 +53,16 @@ export default function LitterCard({ litter }: { litter: Litter }) {
         )}
         <p className="kitten-card__price">2 000 €</p>
       </div>
-    </article>
+    </motion.article>
+  );
+
+  if (!litter.slug?.current) {
+    return card;
+  }
+
+  return (
+    <Link href={`/nos-chatons/${litter.slug.current}`} className="card-link">
+      {card}
+    </Link>
   );
 }
