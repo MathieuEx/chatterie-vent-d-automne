@@ -46,6 +46,8 @@ export default function Footer() {
               <span>201 Rte d&apos;Albi, 31200 Toulouse</span>
               <span>SIRET 94967144000012</span>
               <span>Affixe LOOF n°37170</span>
+              <Link href="/mentions-legales">Mentions légales</Link>
+              <Link href="/politique-de-confidentialite">Politique de confidentialité</Link>
             </div>
           </div>
         </div>
@@ -57,6 +59,8 @@ export default function Footer() {
           <div className="footer__legal">
             <span>Médiateur : MEDIAVET</span>
             <span>ACACED 2022</span>
+            <Link href="/mentions-legales">Mentions légales</Link>
+            <Link href="/politique-de-confidentialite">Confidentialité</Link>
           </div>
         </div>
       </div>
