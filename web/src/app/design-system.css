@@ -511,14 +511,22 @@ section {
 .testimonial-card {
   background: white;
   border-radius: var(--radius-lg);
-  padding: 2rem;
+  padding: 1.5rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   box-shadow: var(--shadow-card);
   transition: transform var(--transition-card);
 }
 .testimonial-card:hover { transform: translateY(-4px); }
+
+.testimonial-card .quote-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .testimonial-card--featured { background: var(--warm-brown); }
 .testimonial-card--featured .quote-text        { color: rgba(255, 255, 255, 0.85); }
@@ -546,6 +554,40 @@ section {
 .avatar--3 { background: var(--blue-powder); }
 .avatar--4 { background: var(--gold); }
 .avatar--5 { background: var(--rose); color: var(--warm-brown); }
+
+.testimonial-carousel {
+  overflow: hidden;
+  margin-top: 2.5rem;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.testimonial-carousel__track {
+  display: flex;
+  width: max-content;
+  gap: var(--gap-cards);
+  animation: testimonial-scroll 32s linear infinite;
+}
+
+.testimonial-carousel:hover .testimonial-carousel__track {
+  animation-play-state: paused;
+}
+
+.testimonial-carousel__item {
+  flex-shrink: 0;
+  width: 340px;
+}
+
+@keyframes testimonial-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-carousel__track {
+    animation: none;
+  }
+}
 .avatar--6 { background: var(--brown-mid); }
 
 .testimonial__name { font-size: 0.83rem; font-weight: 500; color: var(--warm-brown); }
@@ -1293,6 +1335,8 @@ section {
     grid-template-rows: auto;
   }
   .gallery-item:first-child { grid-column: span 2; grid-row: span 1; height: 220px; }
+
+  .testimonial-carousel__item { width: 270px; }
 
   .hero-visual { display: none; }
   .hero-stats  { flex-wrap: wrap; gap: 1.5rem; }

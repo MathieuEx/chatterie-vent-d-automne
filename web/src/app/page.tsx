@@ -10,7 +10,7 @@ import {
 import { urlFor } from "@/lib/sanity/image";
 import LitterCard from "@/components/LitterCard";
 import CatCard from "@/components/CatCard";
-import TestimonialCard from "@/components/TestimonialCard";
+import TestimonialCarousel from "@/components/TestimonialCarousel";
 import Hero from "@/components/Hero";
 
 export const revalidate = 3600;
@@ -272,18 +272,7 @@ export default async function Home() {
             <h2 className="title-section">
               Ce qu&apos;ils disent de <em>nous</em>
             </h2>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: "var(--gap-cards)",
-                marginTop: "2.5rem",
-              }}
-            >
-              {testimonials.map((testimonial, i) => (
-                <TestimonialCard key={testimonial._id} testimonial={testimonial} index={i} />
-              ))}
-            </div>
+            <TestimonialCarousel testimonials={testimonials} />
           </div>
         </section>
       )}
