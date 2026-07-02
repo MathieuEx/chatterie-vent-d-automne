@@ -1,15 +1,21 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site-config";
-import { getCatSlugs, getLitterSlugs } from "@/lib/sanity/queries";
+import { getArticleSlugs, getCatSlugs, getLitterSlugs } from "@/lib/sanity/queries";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const routes = ["", "/nos-chats", "/nos-chatons", "/faq", "/contact"];
-  const [catSlugs, litterSlugs] = await Promise.all([getCatSlugs(), getLitterSlugs()]);
+  const routes = ["", "/nos-chats", "/nos-chatons", "/actualites", "/faq", "/contact"];
+  const [catSlugs, litterSlugs, articleSlugs] = await Promise.all([
+    getCatSlugs(),
+    getLitterSlugs(),
+    getArticleSlugs(),
+  ]);
 
   const staticEntries = routes.map((route) => ({
     url: `${SITE_URL}${route}`,
     lastModified: new Date(),
-    changeFrequency: (route === "/nos-chatons" ? "weekly" : "monthly") as "weekly" | "monthly",
+    changeFrequency: (route === "/nos-chatons" || route === "/actualites"
+      ? "weekly"
+      : "monthly") as "weekly" | "monthly",
     priority: route === "" ? 1 : 0.8,
   }));
 
@@ -27,5 +33,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...catEntries, ...litterEntries];
+  const articleEntries = articleSlugs.map(({ slug }) => ({
+    url: `${SITE_URL}/actualites/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticEntries, ...catEntries, ...litterEntries, ...articleEntries];
 }

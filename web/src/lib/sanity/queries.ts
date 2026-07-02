@@ -1,6 +1,6 @@
 import {client} from './client'
 import type {SanityImageSource} from '@sanity/image-url'
-import type {Cat, FaqPage, HomePage, Litter, SiteSettings, Testimonial} from './types'
+import type {Article, Cat, FaqPage, HomePage, Litter, SiteSettings, Testimonial} from './types'
 
 export async function getLitters(): Promise<Litter[]> {
   return client.fetch(
@@ -91,4 +91,28 @@ export async function getHomePage(): Promise<HomePage | null> {
 
 export async function getFaqPage(): Promise<FaqPage | null> {
   return client.fetch(`*[_type == "faqPage"][0] { sectionLabel, introText, items }`)
+}
+
+export async function getArticles(): Promise<Article[]> {
+  return client.fetch(
+    `*[_type == "article"] | order(publishedAt desc) {
+      _id, title, slug, publishedAt, coverImage, excerpt
+    }`,
+  )
+}
+
+export async function getArticleBySlug(slug: string): Promise<Article | null> {
+  return client.fetch(
+    `*[_type == "article" && slug.current == $slug][0] {
+      _id, title, slug, publishedAt, coverImage, excerpt, body
+    }`,
+    {slug},
+  )
+}
+
+export async function getArticleSlugs(): Promise<{slug: string}[]> {
+  const articles: {slug: {current: string}}[] = await client.fetch(
+    `*[_type == "article" && defined(slug.current)] { slug }`,
+  )
+  return articles.map((article) => ({slug: article.slug.current}))
 }

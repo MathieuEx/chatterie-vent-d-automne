@@ -1,4 +1,5 @@
 import type {SanityImageSource} from '@sanity/image-url'
+import type {PortableTextBlock} from '@portabletext/types'
 
 export type LitterStatus = 'a_venir' | 'disponible' | 'option' | 'reserve' | 'adopte'
 
@@ -121,4 +122,14 @@ export interface FaqPage {
   sectionLabel?: string
   introText?: string
   items?: FaqItem[]
+}
+
+export interface Article {
+  _id: string
+  title: string
+  slug: {current: string} | null
+  publishedAt: string
+  coverImage: SanityImageSource
+  excerpt?: string
+  body?: PortableTextBlock[]
 }

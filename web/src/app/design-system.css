@@ -594,6 +594,76 @@ body {
 
 
 /* ──────────────────────────────────────────────
+   10bis. CARTES — ACTUALITÉS
+   ────────────────────────────────────────────── */
+
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(90, 55, 31, 0.07);
+  transition: transform var(--transition-card);
+}
+
+.blog-card__image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.blog-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.blog-card:hover .blog-card__image img { transform: scale(1.04); }
+
+.blog-card__body    { display: flex; flex-direction: column; flex: 1; padding: 1.1rem 1.1rem 1.4rem; }
+.blog-card__date    { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--terracotta); }
+.blog-card__title   { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 500; color: var(--warm-brown); margin-top: 0.4rem; }
+.blog-card__excerpt { font-size: 0.85rem; font-weight: 300; color: var(--text-mid); line-height: 1.6; margin-top: 0.5rem; }
+
+
+/* ──────────────────────────────────────────────
+   10ter. CONTENU ARTICLE (Portable Text)
+   ────────────────────────────────────────────── */
+
+.article-content {
+  margin-top: 2rem;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  color: var(--text-mid);
+  line-height: 1.85;
+}
+.article-content p { margin-bottom: 1.25rem; }
+.article-content h2,
+.article-content h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: var(--warm-brown);
+  margin: 2rem 0 1rem;
+}
+.article-content h2 { font-size: 1.75rem; }
+.article-content h3 { font-size: 1.35rem; }
+.article-content strong { color: var(--warm-brown); font-weight: 500; }
+.article-content a { color: var(--terracotta); text-decoration: underline; }
+.article-content__image {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: 1.75rem 0;
+}
+.article-content__image img { width: 100%; height: auto; display: block; }
+
+
+/* ──────────────────────────────────────────────
    11. CARTES — TÉMOIGNAGES
    ────────────────────────────────────────────── */
 
