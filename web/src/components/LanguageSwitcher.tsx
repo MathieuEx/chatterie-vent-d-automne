@@ -55,12 +55,40 @@ function setGoogleTranslateLanguage(code: string) {
   select.dispatchEvent(new Event("change"));
 }
 
+// Google injects its own <style>/inline styles for the "Traduit en : ..."
+// banner *after* ours load, so a plain CSS rule loses the cascade. Instead,
+// actively re-hide the banner iframe and undo the body offset it applies,
+// every time Google touches the DOM.
+function watchAndHideBanner() {
+  const enforce = () => {
+    const banner = document.querySelector<HTMLIFrameElement>(".goog-te-banner-frame");
+    if (banner && banner.style.display !== "none") {
+      banner.style.display = "none";
+    }
+    if (document.body.style.top && document.body.style.top !== "0px") {
+      document.body.style.top = "0px";
+    }
+  };
+
+  const observer = new MutationObserver(enforce);
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["style"],
+  });
+  enforce();
+
+  return observer;
+}
+
 export default function LanguageSwitcher() {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     patchDomForGoogleTranslate();
+    const observer = watchAndHideBanner();
 
     window.googleTranslateElementInit = () => {
       if (!window.google) return;
@@ -74,6 +102,8 @@ export default function LanguageSwitcher() {
         "google_translate_element"
       );
     };
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
