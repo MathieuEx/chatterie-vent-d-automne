@@ -310,7 +310,6 @@ section {
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 1.5rem;
 }
 .language-switcher__google {
   position: absolute;

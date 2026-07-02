@@ -54,8 +54,8 @@ export default function Navbar() {
         <Link href="/contact" className="navbar__link navbar__cta" onClick={closeMenu}>
           Nous contacter
         </Link>
+        <LanguageSwitcher />
       </nav>
-      <LanguageSwitcher />
       <button
         type="button"
         className={`navbar__burger ${menuOpen ? "navbar__burger--open" : ""}`}
