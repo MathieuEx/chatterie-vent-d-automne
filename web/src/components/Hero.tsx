@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
+import type { HomePage } from "@/lib/sanity/types";
 
-const STATS = [
-  { value: "3 ans", label: "d'expérience" },
-  { value: "33", label: "chatons adoptés" },
-  { value: "5/5", label: "Google" },
-  { value: "4.7/5", label: "Facebook" },
-];
+type HeroProps = {
+  data?: HomePage["hero"];
+};
 
-export default function Hero() {
+export default function Hero({ data }: HeroProps) {
+  if (!data?.titleEmphasis) return null;
+
   return (
     <section className="hero">
       <div className="hero__bg" />
@@ -22,30 +22,34 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <span className="badge-hero">Toulouse · Ragdoll</span>
+        {data.badge && <span className="badge-hero">{data.badge}</span>}
         <h1 className="title-hero">
-          La Chatterie des <em>Vents d&apos;Automne</em>
+          {data.titlePrefix ? `${data.titlePrefix} ` : null}
+          <em>{data.titleEmphasis}</em>
         </h1>
-        <p className="body-text">
-          Élevage familial passionné à Toulouse, dédié aux chats Ragdoll. Des chatons choyés,
-          en parfaite santé, élevés sous le pied de la maison.
-        </p>
+        {data.description && <p className="body-text">{data.description}</p>}
         <div style={{ display: "flex", gap: "1.25rem", marginTop: "2rem", flexWrap: "wrap" }}>
-          <Link href="/nos-chatons" className="btn-primary">
-            Voir nos chatons disponibles
-          </Link>
-          <Link href="/contact" className="btn-secondary">
-            Nous contacter →
-          </Link>
+          {data.ctaPrimaryLabel && (
+            <Link href="/nos-chatons" className="btn-primary">
+              {data.ctaPrimaryLabel}
+            </Link>
+          )}
+          {data.ctaSecondaryLabel && (
+            <Link href="/contact" className="btn-secondary">
+              {data.ctaSecondaryLabel}
+            </Link>
+          )}
         </div>
-        <div className="hero-stats">
-          {STATS.map((stat) => (
-            <div key={stat.label}>
-              <p className="hero-stats__num">{stat.value}</p>
-              <p className="hero-stats__label">{stat.label}</p>
-            </div>
-          ))}
-        </div>
+        {data.stats && data.stats.length > 0 && (
+          <div className="hero-stats">
+            {data.stats.map((stat) => (
+              <div key={stat.label}>
+                <p className="hero-stats__num">{stat.value}</p>
+                <p className="hero-stats__label">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </motion.div>
     </section>
   );

@@ -17,6 +17,14 @@ export default defineConfig({
           .title('Contenu')
           .items([
             S.listItem()
+              .title('Page d\'accueil')
+              .id('homePage')
+              .child(S.document().schemaType('homePage').documentId('homePage')),
+            S.listItem()
+              .title('Page FAQ')
+              .id('faqPage')
+              .child(S.document().schemaType('faqPage').documentId('faqPage')),
+            S.listItem()
               .title('Paramètres du site')
               .id('siteSettings')
               .child(
@@ -24,7 +32,7 @@ export default defineConfig({
               ),
             S.divider(),
             ...S.documentTypeListItems().filter(
-              (item) => item.getId() !== 'siteSettings',
+              (item) => !['siteSettings', 'homePage', 'faqPage'].includes(item.getId() ?? ''),
             ),
           ]),
     }),

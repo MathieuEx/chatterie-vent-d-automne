@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { getSiteSettings } from "@/lib/sanity/queries";
 
-export default function Footer() {
+export default async function Footer() {
+  const siteSettings = await getSiteSettings();
+
   return (
     <footer className="footer">
       <div className="container">
@@ -10,8 +13,8 @@ export default function Footer() {
               La Chatterie des <span>Vents d&apos;Automne</span>
             </p>
             <p className="footer__tagline">
-              Élevage familial de chats Ragdoll à Toulouse, dans le respect
-              de la santé et du bien-être de nos chats.
+              {siteSettings?.footerTagline ??
+                "Élevage familial de chats Ragdoll à Toulouse, dans le respect de la santé et du bien-être de nos chats."}
             </p>
           </div>
 

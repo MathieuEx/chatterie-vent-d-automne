@@ -1,6 +1,6 @@
 import {client} from './client'
 import type {SanityImageSource} from '@sanity/image-url'
-import type {Cat, Litter, SiteSettings, Testimonial} from './types'
+import type {Cat, FaqPage, HomePage, Litter, SiteSettings, Testimonial} from './types'
 
 export async function getLitters(): Promise<Litter[]> {
   return client.fetch(
@@ -70,7 +70,7 @@ export async function getGalleryImages(limit = 6): Promise<SanityImageSource[]> 
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
-  return client.fetch(`*[_type == "siteSettings"][0] { aboutPhoto }`)
+  return client.fetch(`*[_type == "siteSettings"][0] { aboutPhoto, footerTagline }`)
 }
 
 export async function getTestimonials(limit = 6): Promise<Testimonial[]> {
@@ -80,4 +80,15 @@ export async function getTestimonials(limit = 6): Promise<Testimonial[]> {
     }`,
     {limit},
   )
+}
+
+export async function getHomePage(): Promise<HomePage | null> {
+  return client.fetch(`*[_type == "homePage"][0] {
+    hero, about, catsSection, standardsSection, adoptionSection,
+    testimonialsSection, gallerySection, latestLitterSection
+  }`)
+}
+
+export async function getFaqPage(): Promise<FaqPage | null> {
+  return client.fetch(`*[_type == "faqPage"][0] { sectionLabel, introText, items }`)
 }

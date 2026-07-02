@@ -13,6 +13,11 @@ export default defineType({
         hotspot: true,
       },
     }),
+    defineField({
+      name: 'footerTagline',
+      title: 'Slogan du footer',
+      type: 'text',
+    }),
   ],
   preview: {
     prepare() {

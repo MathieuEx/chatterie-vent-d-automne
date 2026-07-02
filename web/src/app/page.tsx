@@ -6,102 +6,47 @@ import {
   getSiteSettings,
   getCats,
   getTestimonials,
+  getHomePage,
 } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import LitterCard from "@/components/LitterCard";
 import CatCard from "@/components/CatCard";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import Hero from "@/components/Hero";
+import SectionTitle from "@/components/SectionTitle";
 
 export const revalidate = 3600;
 
-const VALUES = [
-  {
-    title: "Tempérament",
-    description:
-      "Nos chatons grandissent au cœur du foyer, sociabilisés aux bruits du quotidien, aux autres chats et à Victor, notre petit chien. Un tempérament si proche de l'humain qu'on parle souvent de « chat-chien ».",
-  },
-  {
-    title: "Santé avant tout",
-    description:
-      "Parents sélectionnés dans toute l'Europe, testés négatifs HCM, PKD, FIV et FeLV. Suivi vétérinaire complet : vaccins, vermifuges, puce et stérilisation précoce.",
-  },
-  {
-    title: "Lignée & beauté",
-    description:
-      "Origines françaises, polonaises et néerlandaises pour préserver le standard de la race, avec des robes traditionnelles et des teintes précieuses.",
-  },
-];
-
-const STANDARDS = [
-  {
-    title: "Bien être animal avant tout",
-    description:
-      "Nos chatons grandissent en liberté au sein de notre foyer, socialisés dès le plus jeune âge avec nos différents Ragdoll et notre chien.",
-  },
-  {
-    title: "Suivi vétérinaire vigoureux",
-    description:
-      "Vaccinations pour typhus, coryza et leucose. Tests FIV, FeLV, ADN, HCM et PKD systématiques sur tous nos reproducteurs.",
-  },
-  {
-    title: "Pedigree LOOF",
-    description: "Chaque chaton part avec son pedigree LOOF et son certificat vétérinaire.",
-  },
-  {
-    title: "Médiation indépendante",
-    description: "En cas de litige, un médiateur agréé (MEDIAVET) est à votre disposition.",
-  },
-  {
-    title: "Accompagnement personnalisé",
-    description: "Nous restons disponibles tout au long de la vie de votre chat pour répondre à vos questions.",
-  },
-];
-
-const CERTIFICATIONS = [
-  { icon: "🎓", className: "cert-badge__icon--blue", name: "ACACED", detail: "Obtenu en 2022" },
-  {
-    icon: "🌾",
-    className: "cert-badge__icon--sage",
-    name: "Chambre d'Agriculture",
-    detail: "Inscrite depuis 2023",
-  },
-  { icon: "🐾", className: "cert-badge__icon--rose", name: "Affixe LOOF", detail: "n°37170" },
-];
-
-const PROCESS_STEPS = [
-  {
-    title: "Premier contact",
-    description: "Vous nous écrivez pour échanger sur vos attentes et découvrir nos chats.",
-  },
-  {
-    title: "Liste d'attente",
-    description: "Inscription avec un acompte de 200 € (10%) pour réserver votre place.",
-  },
-  {
-    title: "Réservation",
-    description: "À la naissance, un acompte de 25% confirme la réservation de votre chaton.",
-  },
-  {
-    title: "Départ à 4 mois",
-    description:
-      "Vaccins (typhus, coryza, rappel ; rage si départ à l'étranger), puce électronique iCAD, stérilisation, vermifuges, certificat vétérinaire, carnet de santé et pedigree LOOF inclus. Accompagnement personnalisé avant, pendant et après l'adoption.",
-  },
-];
+const ACCENT_CLASS: Record<string, string> = {
+  blue: "cert-badge__icon--blue",
+  sage: "cert-badge__icon--sage",
+  rose: "cert-badge__icon--rose",
+};
 
 export default async function Home() {
-  const [latestLitter, galleryImages, siteSettings, cats, testimonials] = await Promise.all([
-    getLatestLitter(),
-    getGalleryImages(6),
-    getSiteSettings(),
-    getCats(),
-    getTestimonials(6),
-  ]);
+  const [latestLitter, galleryImages, siteSettings, cats, testimonials, homePage] =
+    await Promise.all([
+      getLatestLitter(),
+      getGalleryImages(6),
+      getSiteSettings(),
+      getCats(),
+      getTestimonials(6),
+      getHomePage(),
+    ]);
   const featuredCats = cats.filter((cat) => cat.status === "actif").slice(0, 3);
+
+  const hero = homePage?.hero;
+  const about = homePage?.about;
+  const catsSection = homePage?.catsSection;
+  const standardsSection = homePage?.standardsSection;
+  const adoptionSection = homePage?.adoptionSection;
+  const testimonialsSection = homePage?.testimonialsSection;
+  const gallerySection = homePage?.gallerySection;
+  const latestLitterSection = homePage?.latestLitterSection;
 
   return (
     <div>
-      <Hero />
+      <Hero data={hero} />
 
       <section className="bg-cream-dark" id="about">
         <div className="container split-grid">
@@ -124,38 +69,26 @@ export default async function Home() {
               )}
             </div>
             <div className="about-image__deco" />
-            <div className="about-image__badge">
-              <p className="about-image__badge-num">3</p>
-              <p className="about-image__badge-text">
-                ans d&apos;élevage
-                <br />
-                passionné
-              </p>
-            </div>
+            {about?.badgeNumber && (
+              <div className="about-image__badge">
+                <p className="about-image__badge-num">{about.badgeNumber}</p>
+                <p className="about-image__badge-text">{about.badgeText}</p>
+              </div>
+            )}
           </div>
 
           <div>
-            <p className="section-label">Notre histoire</p>
-            <h2 className="title-section">
-              Une passion née d&apos;<em>un coup de cœur</em>
-            </h2>
-            <p className="body-text">
-              Mon histoire avec le Ragdoll a commencé bien avant la création de la chatterie.
-              Plus jeune, j&apos;ai eu la chance d&apos;accueillir, avec ma famille, un chat qui
-              ressemblait beaucoup à cette race — j&apos;ai immédiatement été touchée par sa
-              douceur, son regard et son pelage mi-long aux nuances seal si particulières.
-              Quelques années plus tard, lors de mon installation à Toulouse pour mes études,
-              ce rêve est devenu réalité, puis une évidence : la naissance de la Chatterie des
-              Vents d&apos;Automne.
-            </p>
-            <p className="body-text">
-              Aujourd&apos;hui, nos chats et chatons vivent sous le pied de la maison, sociabilisés
-              dès la naissance aux bruits du quotidien, aux autres chats et à Victor, notre
-              petit chien. Cette proximité façonne le tempérament doux et affectueux qui
-              caractérise nos Ragdolls.
-            </p>
+            {about?.sectionLabel && <p className="section-label">{about.sectionLabel}</p>}
+            {about?.titleEmphasis && (
+              <SectionTitle prefix={about.titlePrefix} emphasis={about.titleEmphasis} />
+            )}
+            {about?.paragraphs?.map((paragraph, i) => (
+              <p className="body-text" key={i}>
+                {paragraph}
+              </p>
+            ))}
             <div className="values-list">
-              {VALUES.map((value) => (
+              {about?.values?.map((value) => (
                 <div key={value.title} className="values-list__item">
                   <span className="values-list__icon" />
                   <p>
@@ -181,14 +114,11 @@ export default async function Home() {
             }}
           >
             <div>
-              <p className="section-label">Nos reproducteurs</p>
-              <h2 className="title-section">
-                Des parents <em>sélectionnés avec soin</em>
-              </h2>
-              <p className="body-text">
-                Tous nos reproducteurs sont testés HCM, PKD, FIV et FeLV négatifs avant toute
-                reproduction.
-              </p>
+              {catsSection?.sectionLabel && <p className="section-label">{catsSection.sectionLabel}</p>}
+              {catsSection?.titleEmphasis && (
+                <SectionTitle prefix={catsSection.titlePrefix} emphasis={catsSection.titleEmphasis} />
+              )}
+              {catsSection?.description && <p className="body-text">{catsSection.description}</p>}
             </div>
             <Link href="/nos-chats" className="btn-secondary">
               Voir tous nos chats →
@@ -216,11 +146,13 @@ export default async function Home() {
       <section className="bg-cream-dark" id="standards">
         <div className="container split-grid">
           <div>
-            <p className="section-label">Nos engagements qualité</p>
-            <h2 className="title-section">
-              Un élevage <em>encadré et transparent</em>
-            </h2>
-            {STANDARDS.map((standard) => (
+            {standardsSection?.sectionLabel && (
+              <p className="section-label">{standardsSection.sectionLabel}</p>
+            )}
+            {standardsSection?.titleEmphasis && (
+              <SectionTitle prefix={standardsSection.titlePrefix} emphasis={standardsSection.titleEmphasis} />
+            )}
+            {standardsSection?.standards?.map((standard) => (
               <div key={standard.title} className="standard-item">
                 <span className="standard-item__bullet" />
                 <div>
@@ -232,11 +164,15 @@ export default async function Home() {
           </div>
 
           <div className="cert-card">
-            <p className="cert-card__title">Certifications</p>
-            <p className="cert-card__sub">Un élevage déclaré et encadré</p>
-            {CERTIFICATIONS.map((cert) => (
+            {standardsSection?.cardTitle && <p className="cert-card__title">{standardsSection.cardTitle}</p>}
+            {standardsSection?.cardSubtitle && (
+              <p className="cert-card__sub">{standardsSection.cardSubtitle}</p>
+            )}
+            {standardsSection?.certifications?.map((cert) => (
               <div key={cert.name} className="cert-badge">
-                <span className={`cert-badge__icon ${cert.className}`}>{cert.icon}</span>
+                <span className={`cert-badge__icon ${ACCENT_CLASS[cert.accent ?? "blue"]}`}>
+                  {cert.icon}
+                </span>
                 <div>
                   <p className="cert-badge__name">{cert.name}</p>
                   <p className="cert-badge__desc">{cert.detail}</p>
@@ -249,12 +185,12 @@ export default async function Home() {
 
       <section className="section--dark bg-warm-brown">
         <div className="container">
-          <p className="section-label">Adoption</p>
-          <h2 className="title-section">
-            Le <em>parcours</em> pour accueillir votre chaton
-          </h2>
+          {adoptionSection?.sectionLabel && <p className="section-label">{adoptionSection.sectionLabel}</p>}
+          {adoptionSection?.titleEmphasis && (
+            <SectionTitle prefix={adoptionSection.titlePrefix} emphasis={adoptionSection.titleEmphasis} />
+          )}
           <div className="process-grid">
-            {PROCESS_STEPS.map((step, i) => (
+            {adoptionSection?.steps?.map((step, i) => (
               <div key={step.title} className="process-step">
                 <p className="process-step__num">{String(i + 1).padStart(2, "0")}</p>
                 <p className="process-step__title">{step.title}</p>
@@ -268,10 +204,12 @@ export default async function Home() {
       {testimonials.length > 0 && (
         <section className="bg-cream-dark" id="avis">
           <div className="container">
-            <p className="section-label">Avis de nos familles</p>
-            <h2 className="title-section">
-              Ce qu&apos;ils disent de <em>nous</em>
-            </h2>
+            {testimonialsSection?.sectionLabel && (
+              <p className="section-label">{testimonialsSection.sectionLabel}</p>
+            )}
+            {testimonialsSection?.titleEmphasis && (
+              <SectionTitle prefix={testimonialsSection.titlePrefix} emphasis={testimonialsSection.titleEmphasis} />
+            )}
             <TestimonialCarousel testimonials={testimonials} />
           </div>
         </section>
@@ -279,10 +217,10 @@ export default async function Home() {
 
       <section className="bg-cream" id="gallery">
         <div className="container">
-          <p className="section-label">En images</p>
-          <h2 className="title-section">
-            La vie de nos <em>chatons</em>
-          </h2>
+          {gallerySection?.sectionLabel && <p className="section-label">{gallerySection.sectionLabel}</p>}
+          {gallerySection?.titleEmphasis && (
+            <SectionTitle prefix={gallerySection.titlePrefix} emphasis={gallerySection.titleEmphasis} />
+          )}
           {galleryImages.length > 0 ? (
             <div className="gallery-grid">
               {galleryImages.map((image, i) => (
@@ -298,7 +236,8 @@ export default async function Home() {
             </div>
           ) : (
             <p className="body-text-sm" style={{ marginTop: "2rem" }}>
-              Galerie à venir — les premières photos seront ajoutées dès la prochaine portée.
+              {gallerySection?.emptyStateText ??
+                "Galerie à venir — les premières photos seront ajoutées dès la prochaine portée."}
             </p>
           )}
         </div>
@@ -307,10 +246,12 @@ export default async function Home() {
       {latestLitter && (
         <section className="bg-gradient-kittens">
           <div className="container">
-            <p className="section-label">Dernière portée</p>
-            <h2 className="title-section">
-              Découvrez nos <em>derniers chatons</em>
-            </h2>
+            {latestLitterSection?.sectionLabel && (
+              <p className="section-label">{latestLitterSection.sectionLabel}</p>
+            )}
+            {latestLitterSection?.titleEmphasis && (
+              <SectionTitle prefix={latestLitterSection.titlePrefix} emphasis={latestLitterSection.titleEmphasis} />
+            )}
             <div style={{ maxWidth: 360 }}>
               <LitterCard litter={latestLitter} />
             </div>
