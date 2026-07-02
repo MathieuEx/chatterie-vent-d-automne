@@ -303,6 +303,48 @@ section {
   transform: translateY(-7px) rotate(-45deg);
 }
 
+/* Google Translate widget — restyled to blend into the navbar and stripped
+   of Google's default chrome (banner, iframe borders, branding). */
+.language-switcher {
+  display: flex;
+  align-items: center;
+  margin-left: 1.5rem;
+}
+.language-switcher #google_translate_element .goog-te-gadget {
+  font-family: var(--font-sans);
+  font-size: 0;
+  color: transparent;
+}
+.language-switcher .goog-te-gadget-simple {
+  background: transparent !important;
+  border: 1px solid var(--brown-mid) !important;
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.75rem !important;
+  display: inline-flex !important;
+  align-items: center;
+}
+.language-switcher .goog-te-gadget-simple span,
+.language-switcher .goog-te-gadget-simple .goog-te-menu-value span {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brown-mid) !important;
+}
+.language-switcher img {
+  display: none !important;
+}
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+body {
+  top: 0 !important;
+}
+.goog-te-balloon-frame,
+#goog-gt-tt,
+.goog-tooltip {
+  display: none !important;
+}
 
 /* ──────────────────────────────────────────────
    7. BOUTONS

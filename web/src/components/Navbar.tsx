@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const links = [
   { href: "/", label: "Accueil" },
@@ -54,6 +55,7 @@ export default function Navbar() {
           Nous contacter
         </Link>
       </nav>
+      <LanguageSwitcher />
       <button
         type="button"
         className={`navbar__burger ${menuOpen ? "navbar__burger--open" : ""}`}
