@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { getSiteSettings } from "@/lib/sanity/queries";
 import { SITE_CONFIG } from "@/lib/site-config";
+import { route, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { localize } from "@/lib/i18n/localize";
 
-export default async function Footer() {
-  const settings = await getSiteSettings();
+export default async function Footer({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale).footer;
+  const settings = localize(await getSiteSettings(), locale);
 
   const email = settings?.email ?? SITE_CONFIG.email;
   const phoneDisplay = settings?.phoneDisplay ?? SITE_CONFIG.phoneDisplay;
@@ -34,35 +38,27 @@ export default async function Footer() {
             <p className="footer__logo">
               La Chatterie des <span>Vents d&apos;Automne</span>
             </p>
-            <p className="footer__tagline">
-              {settings?.footerTagline ??
-                "Élevage familial de chats Ragdoll à Toulouse, dans le respect de la santé et du bien-être de nos chats."}
-            </p>
+            <p className="footer__tagline">{settings?.footerTagline ?? t.tagline}</p>
           </div>
 
           <div>
-            <p className="footer__col-title">{settings?.footerNavTitle ?? "Navigation"}</p>
+            <p className="footer__col-title">{settings?.footerNavTitle ?? t.navigation}</p>
             <div className="footer__links">
-              <Link href="/nos-chats">Nos Chats</Link>
-              <Link href="/nos-chatons">Nos Chatons</Link>
-              <Link href="/actualites">Actualités</Link>
-              <Link href="/faq">FAQ</Link>
-              <Link href="/contact">Contact</Link>
+              <Link href={route("cats", locale)}>{getDictionary(locale).nav.cats}</Link>
+              <Link href={route("kittens", locale)}>{getDictionary(locale).nav.kittens}</Link>
+              <Link href={route("news", locale)}>{getDictionary(locale).nav.news}</Link>
+              <Link href={route("faq", locale)}>{getDictionary(locale).nav.faq}</Link>
+              <Link href={route("contact", locale)}>{getDictionary(locale).nav.contact}</Link>
             </div>
           </div>
 
           <div>
-            <p className="footer__col-title">{settings?.footerContactTitle ?? "Contact"}</p>
+            <p className="footer__col-title">{settings?.footerContactTitle ?? t.contact}</p>
             <div className="footer__links">
               <a href={`mailto:${email}`}>{email}</a>
               <a href={`tel:${phone}`}>{phoneDisplay}</a>
               {socialLinks.map((link) => (
-                <a
-                  key={link.url}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
                   {link.label}
                 </a>
               ))}
@@ -70,7 +66,7 @@ export default async function Footer() {
           </div>
 
           <div>
-            <p className="footer__col-title">{settings?.footerLegalTitle ?? "Légal"}</p>
+            <p className="footer__col-title">{settings?.footerLegalTitle ?? t.legal}</p>
             <div className="footer__links">
               <span>{formattedAddress}</span>
               <span>{siret}</span>
@@ -78,8 +74,14 @@ export default async function Footer() {
               {legal?.extraMentions?.map((mention) => (
                 <span key={mention}>{mention}</span>
               ))}
-              <Link href="/mentions-legales">Mentions légales</Link>
-              <Link href="/politique-de-confidentialite">Politique de confidentialité</Link>
+              {/* Les pages légales relèvent du droit français : une seule
+                  version, en français, quelle que soit la langue du site. */}
+              <Link href={route("legalNotice", locale)} lang="fr">
+                {t.legalNotice}
+              </Link>
+              <Link href={route("privacy", locale)} lang="fr">
+                {t.privacy}
+              </Link>
             </div>
           </div>
         </div>
@@ -89,10 +91,16 @@ export default async function Footer() {
             © {new Date().getFullYear()} {settings?.siteName ?? SITE_CONFIG.name}
           </p>
           <div className="footer__legal">
-            <span>Médiateur : {mediator}</span>
+            <span>
+              {t.mediator} : {mediator}
+            </span>
             <span>{acaced}</span>
-            <Link href="/mentions-legales">Mentions légales</Link>
-            <Link href="/politique-de-confidentialite">Confidentialité</Link>
+            <Link href={route("legalNotice", locale)} lang="fr">
+              {t.legalNotice}
+            </Link>
+            <Link href={route("privacy", locale)} lang="fr">
+              {t.privacyShort}
+            </Link>
           </div>
         </div>
       </div>

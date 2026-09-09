@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import type { HomePage } from "@/lib/sanity/types";
+import { route, type Locale } from "@/lib/i18n/config";
 
 type HeroProps = {
   data?: HomePage["hero"];
+  locale: Locale;
 };
 
-export default function Hero({ data }: HeroProps) {
+export default function Hero({ data, locale }: HeroProps) {
   if (!data?.titleEmphasis) return null;
 
   return (
@@ -30,12 +32,12 @@ export default function Hero({ data }: HeroProps) {
         {data.description && <p className="body-text">{data.description}</p>}
         <div style={{ display: "flex", gap: "1.25rem", marginTop: "2rem", flexWrap: "wrap" }}>
           {data.ctaPrimaryLabel && (
-            <Link href="/nos-chatons" className="btn-primary">
+            <Link href={route("kittens", locale)} className="btn-primary">
               {data.ctaPrimaryLabel}
             </Link>
           )}
           {data.ctaSecondaryLabel && (
-            <Link href="/contact" className="btn-secondary">
+            <Link href={route("contact", locale)} className="btn-secondary">
               {data.ctaSecondaryLabel}
             </Link>
           )}

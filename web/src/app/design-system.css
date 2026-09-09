@@ -320,80 +320,35 @@ section {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Google Translate widget — kept mounted (it performs the actual page
-   translation) but visually hidden. A small custom globe icon + menu
-   (below) drives it instead of Google's default dropdown/banner. */
+/* Sélecteur de langue : deux liens FR / EN vers les URL de chaque langue.
+   Remplace l'ancien widget Google Translate, qui traduisait la page côté
+   navigateur — sans URL propre, donc sans valeur pour le référencement. */
 .language-switcher {
-  position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-}
-.language-switcher__google {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-}
-.goog-te-banner-frame.skiptranslate {
-  display: none !important;
-}
-body {
-  top: 0 !important;
-}
-.goog-te-balloon-frame,
-#goog-gt-tt,
-.goog-tooltip {
-  display: none !important;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  border: 1px solid rgba(182, 125, 69, 0.35);
+  border-radius: var(--radius-pill);
 }
 
-.language-switcher__trigger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--brown-mid);
-  background: transparent;
-  color: var(--brown-mid);
-  cursor: pointer;
-  transition: color var(--transition-base), border-color var(--transition-base);
-}
-.language-switcher__trigger:hover {
-  color: var(--terracotta);
-  border-color: var(--terracotta);
-}
-
-.language-switcher__menu {
-  position: absolute;
-  top: calc(100% + 0.6rem);
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  min-width: 140px;
-  background: var(--cream);
-  border: 1px solid rgba(182, 125, 69, 0.2);
-  border-radius: var(--radius-md);
-  box-shadow: 0 12px 24px rgba(60, 40, 20, 0.12);
-  overflow: hidden;
-  z-index: 20;
-}
-.language-switcher__menu button {
-  padding: 0.65rem 1rem;
-  text-align: left;
+.language-switcher__link {
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-pill);
   font-family: var(--font-sans);
-  font-size: 0.8rem;
-  letter-spacing: 0.03em;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   color: var(--brown-mid);
-  background: transparent;
-  border: none;
-  cursor: pointer;
   transition: background var(--transition-base), color var(--transition-base);
 }
-.language-switcher__menu button:hover {
-  background: rgba(182, 125, 69, 0.1);
+.language-switcher__link:hover {
   color: var(--terracotta);
+}
+.language-switcher__link--current {
+  background: var(--terracotta);
+  color: white;
+  cursor: default;
 }
 
 /* ──────────────────────────────────────────────

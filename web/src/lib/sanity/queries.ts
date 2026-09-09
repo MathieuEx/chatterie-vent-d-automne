@@ -18,7 +18,7 @@ export async function getLitters(): Promise<Litter[]> {
   return client.fetch(
     `*[_type == "portee"] | order(birthDate desc) {
       _id, title, slug, birthDate, description, parentMale, parentFemale,
-      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)]
+      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)], en
     }`,
   )
 }
@@ -27,7 +27,7 @@ export async function getLatestLitter(): Promise<Litter | null> {
   return client.fetch(
     `*[_type == "portee"] | order(birthDate desc)[0] {
       _id, title, slug, birthDate, description, parentMale, parentFemale,
-      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)]
+      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)], en
     }`,
   )
 }
@@ -36,7 +36,7 @@ export async function getLitterBySlug(slug: string): Promise<Litter | null> {
   return client.fetch(
     `*[_type == "portee" && slug.current == $slug][0] {
       _id, title, slug, birthDate, description, parentMale, parentFemale,
-      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)]
+      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)], en
     }`,
     {slug},
   )
@@ -52,7 +52,7 @@ export async function getLitterSlugs(): Promise<{slug: string}[]> {
 export async function getCats(): Promise<Cat[]> {
   return client.fetch(
     `*[_type == "chat"] | order(name asc) {
-      _id, name, slug, colorCode, geneticData, role, status, origin, tests, photo
+      _id, name, slug, colorCode, geneticData, role, status, origin, tests, photo, en
     }`,
   )
 }
@@ -61,7 +61,7 @@ export async function getCatBySlug(slug: string): Promise<Cat | null> {
   return client.fetch(
     `*[_type == "chat" && slug.current == $slug][0] {
       _id, name, slug, description, colorCode, geneticData, role, status,
-      origin, tests, photo, "gallery": gallery[defined(asset)]
+      origin, tests, photo, "gallery": gallery[defined(asset)], en
     }`,
     {slug},
   )
@@ -85,7 +85,7 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
   return client.fetch(`*[_type == "siteSettings"][0] {
     siteName, tagline, aboutPhoto, email, phone, phoneDisplay, address,
     socialLinks, pricing, legal, footerTagline, footerNavTitle,
-    footerContactTitle, footerLegalTitle, defaultSeo
+    footerContactTitle, footerLegalTitle, defaultSeo, en
   }`)
 }
 
@@ -101,18 +101,18 @@ export async function getTestimonials(limit = 6): Promise<Testimonial[]> {
 export async function getHomePage(): Promise<HomePage | null> {
   return client.fetch(`*[_type == "homePage"][0] {
     hero, about, catsSection, standardsSection, adoptionSection,
-    testimonialsSection, gallerySection, latestLitterSection
+    testimonialsSection, gallerySection, latestLitterSection, en
   }`)
 }
 
 export async function getFaqPage(): Promise<FaqPage | null> {
-  return client.fetch(`*[_type == "faqPage"][0] { sectionLabel, introText, items, seo }`)
+  return client.fetch(`*[_type == "faqPage"][0] { sectionLabel, introText, items, seo, en }`)
 }
 
 export async function getArticles(): Promise<Article[]> {
   return client.fetch(
     `*[_type == "article"] | order(publishedAt desc) {
-      _id, title, slug, publishedAt, coverImage, excerpt
+      _id, title, slug, publishedAt, coverImage, excerpt, en
     }`,
   )
 }
@@ -120,7 +120,7 @@ export async function getArticles(): Promise<Article[]> {
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   return client.fetch(
     `*[_type == "article" && slug.current == $slug][0] {
-      _id, title, slug, publishedAt, coverImage, excerpt, body
+      _id, title, slug, publishedAt, coverImage, excerpt, body, en
     }`,
     {slug},
   )
@@ -136,21 +136,21 @@ export async function getArticleSlugs(): Promise<{slug: string}[]> {
 export async function getCatsPage(): Promise<CatsPage | null> {
   return client.fetch(`*[_type == "catsPage"][0] {
     sectionLabel, titlePrefix, titleEmphasis, titleSuffix, introText,
-    malesTitle, malesEmptyText, femalesTitle, femalesEmptyText, seo
+    malesTitle, malesEmptyText, femalesTitle, femalesEmptyText, seo, en
   }`)
 }
 
 export async function getLittersPage(): Promise<LittersPage | null> {
   return client.fetch(`*[_type == "littersPage"][0] {
     sectionLabel, titlePrefix, titleEmphasis, titleSuffix, introText,
-    emptyText, waitingListText, seo
+    emptyText, waitingListText, seo, en
   }`)
 }
 
 export async function getContactPage(): Promise<ContactPage | null> {
   return client.fetch(`*[_type == "contactPage"][0] {
     sectionLabel, titlePrefix, titleEmphasis, titleSuffix, introText,
-    termsTitle, formIntro, submitLabel, successMessage, errorMessage, seo
+    termsTitle, formIntro, submitLabel, successMessage, errorMessage, seo, en
   }`)
 }
 

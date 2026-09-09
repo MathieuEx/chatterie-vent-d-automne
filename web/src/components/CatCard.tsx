@@ -5,14 +5,17 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { urlFor } from "@/lib/sanity/image";
 import type { Cat } from "@/lib/sanity/types";
+import { detailRoute, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 
-const ROLE_BADGE: Record<Cat["role"], { label: string; className: string }> = {
-  male: { label: "Mâle", className: "badge-genre--male" },
-  femelle: { label: "Femelle", className: "badge-genre--female" },
+const ROLE_CLASS: Record<Cat["role"], string> = {
+  male: "badge-genre--male",
+  femelle: "badge-genre--female",
 };
 
-export default function CatCard({ cat }: { cat: Cat }) {
-  const roleBadge = ROLE_BADGE[cat.role];
+export default function CatCard({ cat, locale }: { cat: Cat; locale: Locale }) {
+  const t = getDictionary(locale);
+  const roleLabel = cat.role === "male" ? t.cat.male : t.cat.female;
 
   const card = (
     <motion.article
@@ -30,10 +33,10 @@ export default function CatCard({ cat }: { cat: Cat }) {
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
         />
-        <span className={`badge-genre ${roleBadge.className}`}>{roleBadge.label}</span>
+        <span className={`badge-genre ${ROLE_CLASS[cat.role]}`}>{roleLabel}</span>
       </div>
       <div className="cat-card__body">
-        {cat.status === "retraite" && <p className="meta-label">Retraité</p>}
+        {cat.status === "retraite" && <p className="meta-label">{t.cat.retired}</p>}
         <h3 className="title-card">{cat.name}</h3>
 
         {(cat.colorCode || cat.origin) && (
@@ -54,7 +57,7 @@ export default function CatCard({ cat }: { cat: Cat }) {
   }
 
   return (
-    <Link href={`/nos-chats/${cat.slug.current}`} className="card-link">
+    <Link href={detailRoute("cats", locale, cat.slug.current)} className="card-link">
       {card}
     </Link>
   );

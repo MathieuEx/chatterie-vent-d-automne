@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {slugOptions, slugValidation} from './lib/slug'
+import {englishTab} from './lib/i18n'
 
 export default defineType({
   name: 'portee',
@@ -122,6 +123,20 @@ export default defineType({
         },
       ],
     }),
+    englishTab([
+      defineField({name: 'title', title: 'Titre (English)', type: 'string'}),
+      defineField({name: 'description', title: 'Description (English)', type: 'text'}),
+      defineField({
+        name: 'priceLabel',
+        title: 'Texte à la place du prix (English)',
+        type: 'string',
+      }),
+      defineField({
+        name: 'priceNote',
+        title: 'Précision sous le prix (English)',
+        type: 'string',
+      }),
+    ]),
   ],
   preview: {
     select: {

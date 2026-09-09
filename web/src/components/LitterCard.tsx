@@ -6,18 +6,22 @@ import { motion } from "motion/react";
 import { urlFor } from "@/lib/sanity/image";
 import StatusBadge from "@/components/StatusBadge";
 import type { Litter } from "@/lib/sanity/types";
+import { detailRoute, type Locale } from "@/lib/i18n/config";
+import { DATE_LOCALE, getDictionary } from "@/lib/i18n/dictionary";
 
 type Props = {
   litter: Litter;
+  locale: Locale;
   /** Prix déjà résolu côté serveur (portée → réglages du site → repli). */
   price: string;
   /** Texte des portées à venir, réglable depuis le CMS. */
   waitingListText?: string;
 };
 
-export default function LitterCard({ litter, price, waitingListText }: Props) {
+export default function LitterCard({ litter, locale, price, waitingListText }: Props) {
+  const t = getDictionary(locale);
   const cover = litter.gallery?.[0];
-  const formattedDate = new Intl.DateTimeFormat("fr-FR", {
+  const formattedDate = new Intl.DateTimeFormat(DATE_LOCALE[locale], {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -41,23 +45,23 @@ export default function LitterCard({ litter, price, waitingListText }: Props) {
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
           />
         )}
-        <StatusBadge status={litter.status} />
+        <StatusBadge status={litter.status} locale={locale} />
       </div>
       <div className="kitten-card__body">
         <p className="kitten-card__name">{litter.title}</p>
         <p className="kitten-card__detail">
-          {litter.status === "a_venir" ? "Naissance prévue le" : "Née le"} {formattedDate}
+          {litter.status === "a_venir" ? t.litter.expectedOn : t.litter.bornOn} {formattedDate}
           {(litter.parentMale || litter.parentFemale) &&
             ` · ${litter.parentFemale} × ${litter.parentMale}`}
         </p>
         {litter.status === "a_venir" ? (
           <p className="kitten-card__detail">
-            {waitingListText ?? "Inscriptions sur liste d'attente ouvertes"}
+            {waitingListText ?? t.litter.waitingList}
           </p>
         ) : (
           litter.stats?.total != null && (
             <p className="kitten-card__detail">
-              {litter.stats.available ?? 0} / {litter.stats.total} chaton(s) disponible(s)
+              {t.litter.available(litter.stats.available ?? 0, litter.stats.total)}
             </p>
           )
         )}
@@ -72,7 +76,7 @@ export default function LitterCard({ litter, price, waitingListText }: Props) {
   }
 
   return (
-    <Link href={`/nos-chatons/${litter.slug.current}`} className="card-link">
+    <Link href={detailRoute("kittens", locale, litter.slug.current)} className="card-link">
       {card}
     </Link>
   );

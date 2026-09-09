@@ -21,6 +21,7 @@ export interface Litter {
     reserved?: number
   }
   gallery?: SanityImageSource[]
+  en?: Partial<Pick<Litter, 'title' | 'description' | 'priceLabel' | 'priceNote'>> | null
 }
 
 export type CatRole = 'male' | 'femelle'
@@ -39,6 +40,7 @@ export interface Cat {
   tests?: string
   photo: SanityImageSource
   gallery?: SanityImageSource[]
+  en?: Partial<Pick<Cat, 'description'>> | null
 }
 
 export interface Seo {
@@ -90,6 +92,7 @@ export interface SiteSettings {
   footerContactTitle?: string
   footerLegalTitle?: string
   defaultSeo?: Seo
+  en?: Partial<SiteSettings> | null
 }
 
 /** En-tête commun aux pages simples (étiquette + titre en 3 morceaux + intro). */
@@ -107,12 +110,14 @@ export interface CatsPage extends PageHeader {
   femalesTitle?: string
   femalesEmptyText?: string
   seo?: Seo
+  en?: Partial<CatsPage> | null
 }
 
 export interface LittersPage extends PageHeader {
   emptyText?: string
   waitingListText?: string
   seo?: Seo
+  en?: Partial<LittersPage> | null
 }
 
 export interface ContactPage extends PageHeader {
@@ -122,6 +127,7 @@ export interface ContactPage extends PageHeader {
   successMessage?: string
   errorMessage?: string
   seo?: Seo
+  en?: Partial<ContactPage> | null
 }
 
 export interface LegalPage {
@@ -200,6 +206,7 @@ export interface HomePage {
   testimonialsSection: TitleParts & { sectionLabel?: string }
   gallerySection: TitleParts & { sectionLabel?: string; emptyStateText?: string }
   latestLitterSection: TitleParts & { sectionLabel?: string }
+  en?: Partial<HomePage> | null
 }
 
 export interface FaqItem {
@@ -212,6 +219,7 @@ export interface FaqPage {
   introText?: string
   items?: FaqItem[]
   seo?: Seo
+  en?: Partial<FaqPage> | null
 }
 
 export interface Article {
@@ -222,4 +230,5 @@ export interface Article {
   coverImage: SanityImageSource
   excerpt?: string
   body?: PortableTextBlock[]
+  en?: Partial<Pick<Article, 'title' | 'excerpt' | 'body'>> | null
 }

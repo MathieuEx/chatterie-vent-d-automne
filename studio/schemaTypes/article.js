@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {slugOptions, slugValidation} from './lib/slug'
+import {englishTab} from './lib/i18n'
 
 export default defineType({
   name: 'article',
@@ -60,6 +61,16 @@ export default defineType({
         },
       ],
     }),
+    englishTab([
+      defineField({name: 'title', title: 'Titre (English)', type: 'string'}),
+      defineField({name: 'excerpt', title: 'Résumé (English)', type: 'text'}),
+      defineField({
+        name: 'body',
+        title: 'Contenu (English)',
+        type: 'array',
+        of: [{type: 'block'}, {type: 'image', options: {hotspot: true}}],
+      }),
+    ]),
   ],
   preview: {
     select: {

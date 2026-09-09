@@ -4,19 +4,22 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { route, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 
-const links = [
-  { href: "/", label: "Accueil" },
-  { href: "/nos-chats", label: "Nos Chats" },
-  { href: "/nos-chatons", label: "Nos Chatons" },
-  { href: "/actualites", label: "Actualités" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
-];
-
-export default function Navbar() {
+export default function Navbar({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale).nav;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const links = [
+    { href: route("home", locale), label: t.home },
+    { href: route("cats", locale), label: t.cats },
+    { href: route("kittens", locale), label: t.kittens },
+    { href: route("news", locale), label: t.news },
+    { href: route("faq", locale), label: t.faq },
+    { href: route("contact", locale), label: t.contact },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -56,7 +59,7 @@ export default function Navbar() {
 
   return (
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
-      <Link href="/" className="navbar__logo" onClick={closeMenu}>
+      <Link href={route("home", locale)} className="navbar__logo" onClick={closeMenu}>
         <Image
           src="/logo.png"
           alt="La Chatterie des Vents d'Automne"
@@ -72,16 +75,20 @@ export default function Navbar() {
             {link.label}
           </Link>
         ))}
-        <Link href="/contact" className="navbar__link navbar__cta" onClick={closeMenu}>
-          Nous contacter
+        <Link
+          href={route("contact", locale)}
+          className="navbar__link navbar__cta"
+          onClick={closeMenu}
+        >
+          {t.cta}
         </Link>
-        <LanguageSwitcher />
+        <LanguageSwitcher locale={locale} />
       </nav>
       <button
         type="button"
         className={`navbar__burger ${menuOpen ? "navbar__burger--open" : ""}`}
         onClick={() => setMenuOpen((open) => !open)}
-        aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+        aria-label={menuOpen ? t.closeMenu : t.openMenu}
         aria-expanded={menuOpen}
       >
         <span className="navbar__burger-line" />

@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {englishTab} from './lib/i18n'
 
 export default defineType({
   name: 'siteSettings',
@@ -11,6 +12,7 @@ export default defineType({
     {name: 'legal', title: 'Informations légales'},
     {name: 'footer', title: 'Pied de page'},
     {name: 'seo', title: 'Référencement'},
+    {name: 'en', title: 'English'},
   ],
 
   fields: [
@@ -224,6 +226,54 @@ export default defineType({
         }),
       ],
     }),
+
+    // ── Version anglaise ────────────────────────────────────────
+    englishTab(
+      [
+        defineField({name: 'tagline', title: 'Slogan court (English)', type: 'string'}),
+        defineField({
+          name: 'pricing',
+          title: 'Tarifs (English)',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'kittenPriceLabel',
+              title: 'Texte à la place du prix (English)',
+              type: 'string',
+            }),
+            defineField({
+              name: 'depositReservation',
+              title: 'Acompte à la réservation (English)',
+              type: 'string',
+            }),
+            defineField({
+              name: 'depositWaitingList',
+              title: "Acompte liste d'attente (English)",
+              type: 'string',
+            }),
+            defineField({
+              name: 'termsText',
+              title: 'Bloc "Modalités d\'adoption" (English)',
+              type: 'text',
+            }),
+          ],
+        }),
+        defineField({name: 'footerTagline', title: 'Slogan du pied de page (English)', type: 'text'}),
+        defineField({name: 'footerNavTitle', title: 'Colonne "Navigation" (English)', type: 'string'}),
+        defineField({name: 'footerContactTitle', title: 'Colonne "Contact" (English)', type: 'string'}),
+        defineField({name: 'footerLegalTitle', title: 'Colonne "Légal" (English)', type: 'string'}),
+        defineField({
+          name: 'defaultSeo',
+          title: 'Référencement par défaut (English)',
+          type: 'object',
+          fields: [
+            defineField({name: 'metaTitle', title: 'Titre Google (English)', type: 'string'}),
+            defineField({name: 'metaDescription', title: 'Description Google (English)', type: 'text'}),
+          ],
+        }),
+      ],
+      'en',
+    ),
   ],
 
   preview: {

@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {headerFields, seoField} from './lib/seo'
+import {englishTab} from './lib/i18n'
 
 export default defineType({
   name: 'contactPage',
@@ -9,6 +10,7 @@ export default defineType({
     {name: 'content', title: 'Contenu', default: true},
     {name: 'form', title: 'Formulaire'},
     {name: 'seo', title: 'Référencement'},
+    {name: 'en', title: 'English'},
   ],
   fields: [
     ...headerFields.map((field) => ({...field, group: 'content'})),
@@ -50,6 +52,26 @@ export default defineType({
     }),
 
     seoField(),
+    englishTab(
+      [
+        ...headerFields,
+      defineField({name: 'termsTitle', title: 'Titre modalités (English)', type: 'string'}),
+      defineField({name: 'formIntro', title: 'Intro du formulaire (English)', type: 'text'}),
+      defineField({name: 'submitLabel', title: 'Bouton d\'envoi (English)', type: 'string'}),
+      defineField({name: 'successMessage', title: 'Message de confirmation (English)', type: 'string'}),
+      defineField({name: 'errorMessage', title: 'Message d\'erreur (English)', type: 'text'}),
+      defineField({
+        name: 'seo',
+        title: 'Référencement (English)',
+        type: 'object',
+        fields: [
+          defineField({name: 'metaTitle', title: 'Titre Google (English)', type: 'string'}),
+          defineField({name: 'metaDescription', title: 'Description Google (English)', type: 'text'}),
+        ],
+      }),
+      ],
+      'en',
+    ),
   ],
   preview: {
     prepare() {

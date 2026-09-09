@@ -5,9 +5,17 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { urlFor } from "@/lib/sanity/image";
 import type { Article } from "@/lib/sanity/types";
+import { detailRoute, type Locale } from "@/lib/i18n/config";
+import { DATE_LOCALE } from "@/lib/i18n/dictionary";
 
-export default function ArticleCard({ article }: { article: Article }) {
-  const formattedDate = new Intl.DateTimeFormat("fr-FR", {
+export default function ArticleCard({
+  article,
+  locale,
+}: {
+  article: Article;
+  locale: Locale;
+}) {
+  const formattedDate = new Intl.DateTimeFormat(DATE_LOCALE[locale], {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -43,7 +51,7 @@ export default function ArticleCard({ article }: { article: Article }) {
   }
 
   return (
-    <Link href={`/actualites/${article.slug.current}`} className="card-link">
+    <Link href={detailRoute("news", locale, article.slug.current)} className="card-link">
       {card}
     </Link>
   );

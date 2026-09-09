@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, type SubmitEvent } from "react";
+import type { Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 type Props = {
+  locale: Locale;
   intro?: string;
   submitLabel?: string;
   successMessage?: string;
@@ -14,12 +17,14 @@ type Props = {
 };
 
 export default function ContactForm({
+  locale,
   intro,
   submitLabel,
   successMessage,
   errorMessage,
   fallbackEmail,
 }: Props) {
+  const t = getDictionary(locale).form;
   const [status, setStatus] = useState<Status>("idle");
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
@@ -52,24 +57,24 @@ export default function ContactForm({
 
       <p style={{ position: "absolute", left: "-9999px", width: 0, height: 0, opacity: 0 }}>
         <label>
-          Ne pas remplir si vous êtes humain :{" "}
+          {t.honeypot}{" "}
           <input name="bot-field" tabIndex={-1} autoComplete="off" />
         </label>
       </p>
 
       <div className="form-grid">
         <div className="form-group">
-          <label htmlFor="name">Nom</label>
+          <label htmlFor="name">{t.name}</label>
           <input id="name" name="name" type="text" required />
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">{t.email}</label>
           <input id="email" name="email" type="email" required />
         </div>
 
         <div className="form-group form-group--full">
-          <label htmlFor="message">Message</label>
+          <label htmlFor="message">{t.message}</label>
           <textarea id="message" name="message" rows={5} required />
         </div>
       </div>
@@ -80,22 +85,21 @@ export default function ContactForm({
         className={`btn-submit ${status === "success" ? "btn-submit--success" : ""}`}
       >
         {status === "submitting"
-          ? "Envoi en cours..."
+          ? t.sending
           : status === "success"
-            ? "Message envoyé ✓"
-            : (submitLabel ?? "Envoyer le message")}
+            ? t.sent
+            : (submitLabel ?? t.submit)}
       </button>
 
       {status === "success" && (
         <p className="form-note">
-          {successMessage ?? "Merci, nous vous répondrons rapidement."}
+          {successMessage ?? t.success}
         </p>
       )}
 
       {status === "error" && (
         <p className="form-note" style={{ color: "var(--terracotta-dark)" }}>
-          {errorMessage ??
-            "Une erreur est survenue et votre message n'est pas parti. Merci de nous écrire directement :"}{" "}
+          {errorMessage ?? t.error}{" "}
           <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a>
         </p>
       )}

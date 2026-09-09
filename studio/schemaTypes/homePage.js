@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {englishTab} from './lib/i18n'
 
 const titleFields = [
   defineField({
@@ -21,21 +22,8 @@ const cardFields = [
   defineField({name: 'description', title: 'Description', type: 'text', validation: (Rule) => Rule.required()}),
 ]
 
-export default defineType({
-  name: 'homePage',
-  title: 'Page d\'accueil',
-  type: 'document',
-  groups: [
-    {name: 'hero', title: 'Hero'},
-    {name: 'about', title: 'À propos'},
-    {name: 'cats', title: 'Reproducteurs'},
-    {name: 'standards', title: 'Engagements qualité'},
-    {name: 'adoption', title: 'Parcours d\'adoption'},
-    {name: 'testimonials', title: 'Avis'},
-    {name: 'gallery', title: 'Galerie'},
-    {name: 'latestLitter', title: 'Dernière portée'},
-  ],
-  fields: [
+/** Sections rédactionnelles, réutilisées telles quelles pour l'anglais. */
+const contentFields = [
     defineField({
       name: 'hero',
       title: 'Hero',
@@ -205,7 +193,24 @@ export default defineType({
       group: 'latestLitter',
       fields: [defineField({name: 'sectionLabel', title: 'Étiquette de section', type: 'string'}), ...titleFields],
     }),
+]
+
+export default defineType({
+  name: 'homePage',
+  title: 'Page d\'accueil',
+  type: 'document',
+  groups: [
+    {name: 'hero', title: 'Hero'},
+    {name: 'about', title: 'À propos'},
+    {name: 'cats', title: 'Reproducteurs'},
+    {name: 'standards', title: 'Engagements qualité'},
+    {name: 'adoption', title: 'Parcours d\'adoption'},
+    {name: 'testimonials', title: 'Avis'},
+    {name: 'gallery', title: 'Galerie'},
+    {name: 'latestLitter', title: 'Dernière portée'},
+    {name: 'en', title: 'English'},
   ],
+  fields: [...contentFields, englishTab(contentFields, 'en')],
   preview: {
     prepare() {
       return {title: 'Page d\'accueil'}
