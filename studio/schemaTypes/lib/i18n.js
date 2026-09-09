@@ -51,6 +51,18 @@ export function englishTab(fields, group) {
     description:
       'Traduction affichée sur les pages /en du site. Un champ laissé vide affiche automatiquement le texte français.',
     options: {collapsible: true, collapsed: true},
-    fields: fields.map(asOptionalField),
+    fields: [
+      ...fields.map(asOptionalField),
+      defineField({
+        name: 'sourceFingerprint',
+        title: 'Empreinte du texte français traduit',
+        type: 'string',
+        // Écrit par le bouton "Repartir du français" et par le bouton
+        // "Traduction à jour" ; sert au badge qui signale une version anglaise
+        // devenue obsolète. Aucun intérêt à l'afficher à Amélie.
+        hidden: true,
+        readOnly: true,
+      }),
+    ],
   })
 }

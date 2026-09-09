@@ -2,6 +2,8 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
+import {translationBadge} from './lib/translationBadge'
+import {copyFrenchAction, markTranslationCurrentAction} from './lib/translationActions'
 
 /** Types qui n'existent qu'en un seul exemplaire : on les épingle dans le menu. */
 const SINGLETONS = [
@@ -93,12 +95,20 @@ export default defineConfig({
   ],
 
   document: {
-    // Pas de "Créer" ni de "Dupliquer" sur les pages uniques : Amélie ne peut
-    // pas se retrouver avec deux pages d'accueil concurrentes.
-    actions: (prev, {schemaType}) =>
-      SINGLETONS.includes(schemaType)
+    // Pastille "Anglais à mettre à jour" à côté du bouton Publier : sans elle,
+    // une correction du texte français laisserait les pages /en sur l'ancienne
+    // version sans que personne ne s'en aperçoive.
+    badges: (prev) => [...prev, translationBadge],
+
+    actions: (prev, {schemaType}) => {
+      // Pas de "Créer" ni de "Dupliquer" sur les pages uniques : Amélie ne peut
+      // pas se retrouver avec deux pages d'accueil concurrentes.
+      const base = SINGLETONS.includes(schemaType)
         ? prev.filter(({action}) => action !== 'duplicate' && action !== 'delete')
-        : prev,
+        : prev
+
+      return [...base, copyFrenchAction, markTranslationCurrentAction]
+    },
   },
 
   schema: {

@@ -11,15 +11,43 @@ import type { Locale } from "./config";
  */
 type Translatable = { en?: object | null };
 
-/** Retire les valeurs vides pour qu'elles ne masquent pas le français. */
-function meaningfulEntries(source: object): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
 
-  for (const [key, value] of Object.entries(source)) {
-    if (value === null || value === undefined) continue;
-    if (typeof value === "string" && value.trim() === "") continue;
-    if (Array.isArray(value) && value.length === 0) continue;
-    result[key] = value;
+/** Une valeur vide côté anglais laisse passer le français. */
+function isEmpty(value: unknown): boolean {
+  if (value === null || value === undefined) return true;
+  if (typeof value === "string") return value.trim() === "";
+  if (Array.isArray(value)) return value.length === 0;
+  return false;
+}
+
+/**
+ * Fusionne la traduction par-dessus le français, champ par champ et en
+ * profondeur.
+ *
+ * La descente dans les sous-objets est indispensable : l'onglet anglais de
+ * `siteSettings` ne contient que les textes de `pricing`, pas le montant
+ * `kittenPrice`. Un remplacement en bloc effaçait donc le prix côté anglais —
+ * le site annonçait 2 200 € en français et 2 000 € en anglais.
+ *
+ * Les tableaux, eux, sont remplacés en bloc : une liste traduite (les questions
+ * de la FAQ, les étapes d'adoption) doit être complète, sinon on mélangerait
+ * les deux langues au sein d'une même liste.
+ */
+function deepMerge(
+  base: Record<string, unknown>,
+  override: Record<string, unknown>,
+): Record<string, unknown> {
+  const result = { ...base };
+
+  for (const [key, value] of Object.entries(override)) {
+    if (isEmpty(value)) continue;
+
+    const current = result[key];
+    result[key] =
+      isPlainObject(value) && isPlainObject(current) ? deepMerge(current, value) : value;
   }
 
   return result;
@@ -37,7 +65,7 @@ export function localize<T extends Translatable>(doc: T | null, locale: Locale):
 
   if (locale === "fr" || !en) return rest as T;
 
-  return { ...rest, ...meaningfulEntries(en) } as T;
+  return deepMerge(rest, en as Record<string, unknown>) as T;
 }
 
 export function localizeAll<T extends Translatable>(docs: T[], locale: Locale): T[] {
