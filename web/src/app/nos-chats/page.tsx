@@ -1,77 +1,79 @@
-import { getCats } from "@/lib/sanity/queries";
+import { getCats, getCatsPage } from "@/lib/sanity/queries";
 import CatCard from "@/components/CatCard";
+import PageHeader from "@/components/PageHeader";
+import { pageMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Nos Chats Ragdoll à Toulouse | La Chatterie des Vents d'Automne",
-  description:
-    "Découvrez nos chats reproducteurs Ragdoll à Toulouse, mâles et femelles, testés HCM, PKD, FIV et FeLV négatifs.",
-  alternates: { canonical: "/nos-chats" },
-  openGraph: {
-    title: "Nos Chats Ragdoll à Toulouse | La Chatterie des Vents d'Automne",
-    description:
-      "Découvrez nos chats reproducteurs Ragdoll à Toulouse, mâles et femelles, testés HCM, PKD, FIV et FeLV négatifs.",
-    url: "/nos-chats",
-  },
-};
+const FALLBACK_TITLE = "Nos Chats Ragdoll à Toulouse | La Chatterie des Vents d'Automne";
+const FALLBACK_DESCRIPTION =
+  "Découvrez nos chats reproducteurs Ragdoll à Toulouse, mâles et femelles, testés HCM, PKD, FIV et FeLV négatifs.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getCatsPage();
+  return pageMetadata({
+    seo: page?.seo,
+    fallbackTitle: FALLBACK_TITLE,
+    fallbackDescription: FALLBACK_DESCRIPTION,
+    path: "/nos-chats",
+  });
+}
+
+const GRID_STYLE = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+  gap: "var(--gap-cards)",
+} as const;
 
 export default async function NosChatsPage() {
-  const cats = await getCats();
+  const [cats, page] = await Promise.all([getCats(), getCatsPage()]);
   const males = cats.filter((cat) => cat.role === "male");
   const femelles = cats.filter((cat) => cat.role === "femelle");
 
   return (
     <section className="bg-cream" style={{ paddingTop: "8rem" }}>
       <div className="container">
-        <p className="section-label" style={{ justifyContent: "center" }}>
-          Nos reproducteurs
-        </p>
-        <h1 className="title-hero" style={{ textAlign: "center", fontSize: "clamp(2.4rem, 4vw, 3.5rem)" }}>
-          Nos <em>Chats</em> Ragdoll
-        </h1>
-        <p className="body-text" style={{ margin: "0 auto", textAlign: "center" }}>
-          Nos reproducteurs Ragdoll, basés à Toulouse, sont sélectionnés pour leur santé, leur
-          tempérament et la beauté de leur lignée.
-        </p>
+        <PageHeader
+          content={page}
+          fallback={{
+            sectionLabel: "Nos reproducteurs",
+            titlePrefix: "Nos",
+            titleEmphasis: "Chats",
+            titleSuffix: "Ragdoll",
+            introText:
+              "Nos reproducteurs Ragdoll, basés à Toulouse, sont sélectionnés pour leur santé, leur tempérament et la beauté de leur lignée.",
+          }}
+        />
 
         <h2 className="title-section" style={{ marginTop: "4rem" }}>
-          Mâles
+          {page?.malesTitle ?? "Mâles"}
         </h2>
         {males.length > 0 ? (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: "var(--gap-cards)",
-            }}
-          >
+          <div style={GRID_STYLE}>
             {males.map((cat) => (
               <CatCard key={cat._id} cat={cat} />
             ))}
           </div>
         ) : (
-          <p className="body-text-sm">Aucun mâle référencé pour le moment.</p>
+          <p className="body-text-sm">
+            {page?.malesEmptyText ?? "Aucun mâle référencé pour le moment."}
+          </p>
         )}
 
         <h2 className="title-section" style={{ marginTop: "4rem" }}>
-          Femelles
+          {page?.femalesTitle ?? "Femelles"}
         </h2>
         {femelles.length > 0 ? (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: "var(--gap-cards)",
-            }}
-          >
+          <div style={GRID_STYLE}>
             {femelles.map((cat) => (
               <CatCard key={cat._id} cat={cat} />
             ))}
           </div>
         ) : (
-          <p className="body-text-sm">Aucune femelle référencée pour le moment.</p>
+          <p className="body-text-sm">
+            {page?.femalesEmptyText ?? "Aucune femelle référencée pour le moment."}
+          </p>
         )}
       </div>
     </section>

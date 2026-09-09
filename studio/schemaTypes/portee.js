@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {slugOptions, slugValidation} from './lib/slug'
 
 export default defineType({
   name: 'portee',
@@ -16,11 +17,8 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-      validation: (Rule) => Rule.required(),
+      options: slugOptions('title'),
+      validation: slugValidation,
     }),
     defineField({
       name: 'birthDate',
@@ -64,6 +62,27 @@ export default defineType({
       },
       initialValue: 'disponible',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'price',
+      title: 'Prix affiché (€)',
+      type: 'number',
+      description:
+        'Prix d\'un chaton de cette portée, en euros. Laissez vide pour utiliser le prix par défaut défini dans "Paramètres du site".',
+      validation: (Rule) => Rule.min(0),
+    }),
+    defineField({
+      name: 'priceLabel',
+      title: 'Texte à la place du prix (optionnel)',
+      type: 'string',
+      description:
+        'Remplace complètement le prix affiché. Ex: "Nous consulter" ou "À partir de 2 000 €". Laissez vide pour afficher le prix ci-dessus.',
+    }),
+    defineField({
+      name: 'priceNote',
+      title: 'Précision sous le prix (optionnel)',
+      type: 'string',
+      description: 'Ex: "Acompte de 25 % à la réservation"',
     }),
     defineField({
       name: 'stats',

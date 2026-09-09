@@ -10,6 +10,7 @@ import {
 } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import LitterCard from "@/components/LitterCard";
+import { litterPrice } from "@/lib/pricing";
 import CatCard from "@/components/CatCard";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import Hero from "@/components/Hero";
@@ -253,7 +254,7 @@ export default async function Home() {
               <SectionTitle prefix={latestLitterSection.titlePrefix} emphasis={latestLitterSection.titleEmphasis} />
             )}
             <div style={{ maxWidth: 360 }}>
-              <LitterCard litter={latestLitter} />
+              <LitterCard litter={latestLitter} price={litterPrice(latestLitter, siteSettings)} />
             </div>
             <div style={{ marginTop: "2rem" }}>
               <Link href="/nos-chatons" className="btn-secondary">

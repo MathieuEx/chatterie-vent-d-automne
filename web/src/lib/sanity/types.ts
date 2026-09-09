@@ -12,6 +12,9 @@ export interface Litter {
   parentMale?: string
   parentFemale?: string
   status: LitterStatus
+  price?: number
+  priceLabel?: string
+  priceNote?: string
   stats?: {
     total?: number
     available?: number
@@ -38,9 +41,95 @@ export interface Cat {
   gallery?: SanityImageSource[]
 }
 
+export interface Seo {
+  metaTitle?: string
+  metaDescription?: string
+}
+
+export interface PostalAddress {
+  streetAddress?: string
+  postalCode?: string
+  addressLocality?: string
+  addressCountry?: string
+}
+
+export interface SocialLink {
+  label: string
+  url: string
+}
+
+export interface Pricing {
+  kittenPrice?: number
+  kittenPriceLabel?: string
+  depositReservation?: string
+  depositWaitingList?: string
+  termsText?: string
+}
+
+export interface LegalInfo {
+  siret?: string
+  loofAffix?: string
+  acaced?: string
+  mediator?: string
+  extraMentions?: string[]
+}
+
 export interface SiteSettings {
+  siteName?: string
+  tagline?: string
   aboutPhoto?: SanityImageSource
+  email?: string
+  phone?: string
+  phoneDisplay?: string
+  address?: PostalAddress
+  socialLinks?: SocialLink[]
+  pricing?: Pricing
+  legal?: LegalInfo
   footerTagline?: string
+  footerNavTitle?: string
+  footerContactTitle?: string
+  footerLegalTitle?: string
+  defaultSeo?: Seo
+}
+
+/** En-tête commun aux pages simples (étiquette + titre en 3 morceaux + intro). */
+export interface PageHeader {
+  sectionLabel?: string
+  titlePrefix?: string
+  titleEmphasis?: string
+  titleSuffix?: string
+  introText?: string
+}
+
+export interface CatsPage extends PageHeader {
+  malesTitle?: string
+  malesEmptyText?: string
+  femalesTitle?: string
+  femalesEmptyText?: string
+  seo?: Seo
+}
+
+export interface LittersPage extends PageHeader {
+  emptyText?: string
+  waitingListText?: string
+  seo?: Seo
+}
+
+export interface ContactPage extends PageHeader {
+  termsTitle?: string
+  formIntro?: string
+  submitLabel?: string
+  successMessage?: string
+  errorMessage?: string
+  seo?: Seo
+}
+
+export interface LegalPage {
+  title: string
+  sectionLabel?: string
+  updatedAt?: string
+  body?: PortableTextBlock[]
+  seo?: Seo
 }
 
 export type TestimonialSource = 'google' | 'facebook'
@@ -122,6 +211,7 @@ export interface FaqPage {
   sectionLabel?: string
   introText?: string
   items?: FaqItem[]
+  seo?: Seo
 }
 
 export interface Article {

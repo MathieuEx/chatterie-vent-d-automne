@@ -7,7 +7,15 @@ import { urlFor } from "@/lib/sanity/image";
 import StatusBadge from "@/components/StatusBadge";
 import type { Litter } from "@/lib/sanity/types";
 
-export default function LitterCard({ litter }: { litter: Litter }) {
+type Props = {
+  litter: Litter;
+  /** Prix déjà résolu côté serveur (portée → réglages du site → repli). */
+  price: string;
+  /** Texte des portées à venir, réglable depuis le CMS. */
+  waitingListText?: string;
+};
+
+export default function LitterCard({ litter, price, waitingListText }: Props) {
   const cover = litter.gallery?.[0];
   const formattedDate = new Intl.DateTimeFormat("fr-FR", {
     day: "numeric",
@@ -43,7 +51,9 @@ export default function LitterCard({ litter }: { litter: Litter }) {
             ` · ${litter.parentFemale} × ${litter.parentMale}`}
         </p>
         {litter.status === "a_venir" ? (
-          <p className="kitten-card__detail">Inscriptions sur liste d&apos;attente ouvertes</p>
+          <p className="kitten-card__detail">
+            {waitingListText ?? "Inscriptions sur liste d'attente ouvertes"}
+          </p>
         ) : (
           litter.stats?.total != null && (
             <p className="kitten-card__detail">
@@ -51,7 +61,8 @@ export default function LitterCard({ litter }: { litter: Litter }) {
             </p>
           )
         )}
-        <p className="kitten-card__price">2 000 €</p>
+        <p className="kitten-card__price">{price}</p>
+        {litter.priceNote && <p className="kitten-card__detail">{litter.priceNote}</p>}
       </div>
     </motion.article>
   );

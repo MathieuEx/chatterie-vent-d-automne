@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {slugOptions, slugValidation} from './lib/slug'
 
 export default defineType({
   name: 'chat',
@@ -17,11 +18,8 @@ export default defineType({
       title: 'Slug',
       type: 'slug',
       description: 'Utilisé dans l\'URL de la page du chat. Cliquez sur "Generate" puis "Publish".',
-      options: {
-        source: 'name',
-        maxLength: 96,
-      },
-      validation: (Rule) => Rule.required(),
+      options: slugOptions('name'),
+      validation: slugValidation,
     }),
     defineField({
       name: 'description',

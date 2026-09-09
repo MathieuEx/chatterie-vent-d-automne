@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
 import FaqAccordion from "@/components/FaqAccordion";
 import { getFaqPage } from "@/lib/sanity/queries";
+import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "FAQ | La Chatterie des Vents d'Automne - Ragdoll Toulouse",
-  description:
-    "Toutes les réponses à vos questions sur l'adoption d'un chaton Ragdoll : prix, conditions de départ, réservation, liste d'attente et garanties de santé.",
-  alternates: { canonical: "/faq" },
-  openGraph: {
-    title: "FAQ | La Chatterie des Vents d'Automne - Ragdoll Toulouse",
-    description:
-      "Toutes les réponses à vos questions sur l'adoption d'un chaton Ragdoll : prix, conditions de départ, réservation, liste d'attente et garanties de santé.",
-    url: "/faq",
-  },
-};
+const FALLBACK_TITLE = "FAQ | La Chatterie des Vents d'Automne - Ragdoll Toulouse";
+const FALLBACK_DESCRIPTION =
+  "Toutes les réponses à vos questions sur l'adoption d'un chaton Ragdoll : prix, conditions de départ, réservation, liste d'attente et garanties de santé.";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getFaqPage();
+  return pageMetadata({
+    seo: page?.seo,
+    fallbackTitle: FALLBACK_TITLE,
+    fallbackDescription: FALLBACK_DESCRIPTION,
+    path: "/faq",
+  });
+}
 export default async function FaqPage() {
   const faqPage = await getFaqPage();
 

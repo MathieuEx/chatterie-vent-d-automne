@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {slugOptions, slugValidation} from './lib/slug'
 
 export default defineType({
   name: 'article',
@@ -17,11 +18,8 @@ export default defineType({
       title: 'Slug',
       type: 'slug',
       description: 'Utilisé dans l\'URL de l\'article. Cliquez sur "Generate" puis "Publish".',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-      validation: (Rule) => Rule.required(),
+      options: slugOptions('title'),
+      validation: slugValidation,
     }),
     defineField({
       name: 'publishedAt',

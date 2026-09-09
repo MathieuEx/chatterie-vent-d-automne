@@ -3,6 +3,8 @@ import { Cormorant_Garamond, Fraunces, Montserrat } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SITE_CONFIG, SITE_URL } from "@/lib/site-config";
+import { getSiteSettings } from "@/lib/sanity/queries";
+import { defaultPrice } from "@/lib/pricing";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -25,50 +27,64 @@ const fraunces = Fraunces({
   variable: "--font-logo",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: "La Chatterie des Vents d'Automne | Élevage Ragdoll à Toulouse",
-  description: SITE_CONFIG.description,
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: "/",
-    siteName: SITE_CONFIG.name,
-    title: "La Chatterie des Vents d'Automne | Élevage Ragdoll à Toulouse",
-    description: SITE_CONFIG.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "La Chatterie des Vents d'Automne | Élevage Ragdoll à Toulouse",
-    description: SITE_CONFIG.description,
-  },
-};
+const FALLBACK_TITLE = "La Chatterie des Vents d'Automne | Élevage Ragdoll à Toulouse";
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: SITE_CONFIG.name,
-  description: SITE_CONFIG.description,
-  url: SITE_URL,
-  image: `${SITE_URL}/logo.png`,
-  telephone: SITE_CONFIG.phone,
-  email: SITE_CONFIG.email,
-  priceRange: "2000 EUR",
-  address: {
-    "@type": "PostalAddress",
-    ...SITE_CONFIG.address,
-  },
-  sameAs: [SITE_CONFIG.instagram],
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const title = settings?.defaultSeo?.metaTitle || FALLBACK_TITLE;
+  const description = settings?.defaultSeo?.metaDescription || SITE_CONFIG.description;
+  const siteName = settings?.siteName || SITE_CONFIG.name;
 
-export default function RootLayout({
+  return {
+    metadataBase: new URL(SITE_URL),
+    title,
+    description,
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      locale: "fr_FR",
+      url: "/",
+      siteName,
+      title,
+      description,
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
+
+/** Fiche établissement lue par Google : coordonnées et tarif viennent du CMS. */
+async function buildJsonLd() {
+  const settings = await getSiteSettings();
+  const address = settings?.address;
+  const socials = settings?.socialLinks?.map((link) => link.url) ?? [SITE_CONFIG.instagram];
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: settings?.siteName || SITE_CONFIG.name,
+    description: settings?.defaultSeo?.metaDescription || SITE_CONFIG.description,
+    url: SITE_URL,
+    image: `${SITE_URL}/logo.png`,
+    telephone: settings?.phone || SITE_CONFIG.phone,
+    email: settings?.email || SITE_CONFIG.email,
+    priceRange: defaultPrice(settings),
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: address?.streetAddress || SITE_CONFIG.address.streetAddress,
+      postalCode: address?.postalCode || SITE_CONFIG.address.postalCode,
+      addressLocality: address?.addressLocality || SITE_CONFIG.address.addressLocality,
+      addressCountry: address?.addressCountry || SITE_CONFIG.address.addressCountry,
+    },
+    sameAs: socials,
+  };
+}
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = await buildJsonLd();
+
   return (
     <html lang="fr" className={`${cormorant.variable} ${montserrat.variable} ${fraunces.variable}`}>
       <body>

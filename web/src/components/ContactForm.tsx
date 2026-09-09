@@ -4,7 +4,22 @@ import { useState, type SubmitEvent } from "react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export default function ContactForm() {
+type Props = {
+  intro?: string;
+  submitLabel?: string;
+  successMessage?: string;
+  errorMessage?: string;
+  /** Adresse proposée en secours si l'envoi échoue. */
+  fallbackEmail: string;
+};
+
+export default function ContactForm({
+  intro,
+  submitLabel,
+  successMessage,
+  errorMessage,
+  fallbackEmail,
+}: Props) {
   const [status, setStatus] = useState<Status>("idle");
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
@@ -33,9 +48,12 @@ export default function ContactForm() {
 
   return (
     <form name="contact" onSubmit={handleSubmit} className="contact-form">
+      {intro && <p className="body-text-sm">{intro}</p>}
+
       <p style={{ position: "absolute", left: "-9999px", width: 0, height: 0, opacity: 0 }}>
         <label>
-          Ne pas remplir si vous êtes humain : <input name="bot-field" tabIndex={-1} autoComplete="off" />
+          Ne pas remplir si vous êtes humain :{" "}
+          <input name="bot-field" tabIndex={-1} autoComplete="off" />
         </label>
       </p>
 
@@ -65,16 +83,20 @@ export default function ContactForm() {
           ? "Envoi en cours..."
           : status === "success"
             ? "Message envoyé ✓"
-            : "Envoyer le message"}
+            : (submitLabel ?? "Envoyer le message")}
       </button>
 
       {status === "success" && (
-        <p className="form-note">Merci, nous vous répondrons rapidement.</p>
+        <p className="form-note">
+          {successMessage ?? "Merci, nous vous répondrons rapidement."}
+        </p>
       )}
+
       {status === "error" && (
         <p className="form-note" style={{ color: "var(--terracotta-dark)" }}>
-          Une erreur est survenue. Merci de réessayer ou de nous contacter directement par
-          email.
+          {errorMessage ??
+            "Une erreur est survenue et votre message n'est pas parti. Merci de nous écrire directement :"}{" "}
+          <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a>
         </p>
       )}
     </form>

@@ -25,10 +25,30 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Fige la page derrière le menu ouvert. `overflow: hidden` seul est ignoré
+  // par Safari iOS : on sort le body du flux en mémorisant la position, puis on
+  // la restaure à la fermeture — sinon ouvrir le menu en milieu de page
+  // renvoyait en haut.
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    if (!menuOpen) return;
+
+    const scrollY = window.scrollY;
+    const { body } = document;
+    const previous = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      overflow: body.style.overflow,
+    };
+
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = "";
+      Object.assign(body.style, previous);
+      window.scrollTo(0, scrollY);
     };
   }, [menuOpen]);
 

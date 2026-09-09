@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getLitterBySlug, getLitterSlugs } from "@/lib/sanity/queries";
+import { getLitterBySlug, getLitterSlugs, getLittersPage, getSiteSettings } from "@/lib/sanity/queries";
+import { litterPrice } from "@/lib/pricing";
 import { urlFor } from "@/lib/sanity/image";
 import StatusBadge from "@/components/StatusBadge";
 
@@ -44,7 +45,11 @@ export default async function LitterDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const litter = await getLitterBySlug(slug);
+  const [litter, settings, littersPage] = await Promise.all([
+    getLitterBySlug(slug),
+    getSiteSettings(),
+    getLittersPage(),
+  ]);
 
   if (!litter) {
     notFound();
@@ -99,7 +104,7 @@ export default async function LitterDetailPage({
 
         {litter.status === "a_venir" ? (
           <p className="body-text-sm" style={{ marginTop: "0.35rem" }}>
-            Inscriptions sur liste d&apos;attente ouvertes
+            {littersPage?.waitingListText ?? "Inscriptions sur liste d'attente ouvertes"}
           </p>
         ) : (
           litter.stats?.total != null && (
@@ -111,8 +116,13 @@ export default async function LitterDetailPage({
         )}
 
         <p className="kitten-card__price" style={{ marginTop: "0.75rem" }}>
-          2 000 €
+          {litterPrice(litter, settings)}
         </p>
+        {litter.priceNote && (
+          <p className="body-text-sm" style={{ marginTop: "0.35rem" }}>
+            {litter.priceNote}
+          </p>
+        )}
 
         {litter.description && (
           <p className="body-text" style={{ maxWidth: "100%", whiteSpace: "pre-line", marginTop: "2rem" }}>

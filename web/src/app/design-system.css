@@ -221,11 +221,28 @@ section {
   transition: background var(--transition-slow), box-shadow var(--transition-slow);
 }
 
-.navbar--scrolled {
+/* Le fond flouté de la barre est porté par un pseudo-élément, et non par le
+   <header> lui-même : un `backdrop-filter` fait de l'élément le bloc conteneur
+   de ses descendants `position: fixed`. Posé sur .navbar, il enfermait le menu
+   mobile plein écran dans la hauteur de la barre dès que la page était défilée
+   (le menu ne fonctionnait qu'en haut de page, là où .navbar--scrolled est
+   absent). Le pseudo-élément n'a pas de descendant, donc plus de piège. */
+.navbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: rgba(245, 241, 235, 0.96);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 1px 0 rgba(182, 125, 69, 0.15);
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+  pointer-events: none;
+}
+
+.navbar--scrolled::before {
+  opacity: 1;
 }
 
 .navbar__logo {
@@ -1532,6 +1549,10 @@ body {
     background: var(--cream);
     transform: translateX(100%);
     transition: transform var(--transition-slow);
+    /* Écrans courts (téléphone en paysage) : le menu doit pouvoir défiler,
+       sinon les derniers liens sont inatteignables. */
+    overflow-y: auto;
+    padding: 6rem 1.5rem 2.5rem;
   }
   .navbar__links--open {
     transform: translateX(0);

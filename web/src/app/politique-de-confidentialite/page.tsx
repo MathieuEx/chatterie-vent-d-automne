@@ -1,14 +1,60 @@
 import type { Metadata } from "next";
+import { PortableText } from "@portabletext/react";
+import { getLegalPage } from "@/lib/sanity/queries";
 
-export const metadata: Metadata = {
-  title: "Politique de confidentialité | La Chatterie des Vents d'Automne",
-  description:
-    "Politique de confidentialité de La Chatterie des Vents d'Automne : données collectées via le formulaire de contact, finalités, durée de conservation et droits RGPD.",
-  alternates: { canonical: "/politique-de-confidentialite" },
-  robots: { index: false, follow: true },
-};
+const FALLBACK_TITLE = "Politique de confidentialité | La Chatterie des Vents d'Automne";
+const FALLBACK_DESCRIPTION = "Politique de confidentialité de La Chatterie des Vents d'Automne : données collectées via le formulaire de contact, finalités, durée de conservation et droits RGPD.";
 
-export default function PolitiqueConfidentialitePage() {
+export const revalidate = 3600;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getLegalPage("politiqueConfidentialite");
+  return {
+    title: page?.seo?.metaTitle || FALLBACK_TITLE,
+    description: page?.seo?.metaDescription || FALLBACK_DESCRIPTION,
+    alternates: { canonical: "/politique-de-confidentialite" },
+    robots: { index: false, follow: true },
+  };
+}
+
+export default async function PolitiqueConfidentialitePage() {
+  const page = await getLegalPage("politiqueConfidentialite");
+
+  // Dès qu'Amélie écrit quelque chose dans le Studio, son texte remplace
+  // le texte de référence ci-dessous — qui reste le filet de sécurité.
+  if (page?.body?.length) {
+    return (
+      <section className="bg-cream-dark" style={{ paddingTop: "8rem", minHeight: "60vh" }}>
+        <div className="container">
+          {page.sectionLabel && (
+            <p className="section-label" style={{ justifyContent: "center" }}>
+              {page.sectionLabel}
+            </p>
+          )}
+          <h1
+            className="title-hero"
+            style={{ textAlign: "center", fontSize: "clamp(2.4rem, 4vw, 3.5rem)" }}
+          >
+            <em>{page.title}</em>
+          </h1>
+          <div className="legal-content" style={{ marginTop: "3rem" }}>
+            {page.updatedAt && (
+              <p className="legal-content__updated" style={{ textAlign: "center" }}>
+                Dernière mise à jour :{" "}
+                {new Intl.DateTimeFormat("fr-FR", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                }).format(new Date(page.updatedAt))}
+              </p>
+            )}
+            <PortableText value={page.body} />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-cream-dark" style={{ paddingTop: "8rem", minHeight: "60vh" }}>
       <div className="container">

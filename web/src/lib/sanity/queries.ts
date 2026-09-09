@@ -1,12 +1,24 @@
 import {client} from './client'
 import type {SanityImageSource} from '@sanity/image-url'
-import type {Article, Cat, FaqPage, HomePage, Litter, SiteSettings, Testimonial} from './types'
+import type {
+  Article,
+  Cat,
+  CatsPage,
+  ContactPage,
+  FaqPage,
+  HomePage,
+  LegalPage,
+  Litter,
+  LittersPage,
+  SiteSettings,
+  Testimonial,
+} from './types'
 
 export async function getLitters(): Promise<Litter[]> {
   return client.fetch(
     `*[_type == "portee"] | order(birthDate desc) {
       _id, title, slug, birthDate, description, parentMale, parentFemale,
-      status, stats, "gallery": gallery[defined(asset)]
+      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)]
     }`,
   )
 }
@@ -15,7 +27,7 @@ export async function getLatestLitter(): Promise<Litter | null> {
   return client.fetch(
     `*[_type == "portee"] | order(birthDate desc)[0] {
       _id, title, slug, birthDate, description, parentMale, parentFemale,
-      status, stats, "gallery": gallery[defined(asset)]
+      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)]
     }`,
   )
 }
@@ -24,7 +36,7 @@ export async function getLitterBySlug(slug: string): Promise<Litter | null> {
   return client.fetch(
     `*[_type == "portee" && slug.current == $slug][0] {
       _id, title, slug, birthDate, description, parentMale, parentFemale,
-      status, stats, "gallery": gallery[defined(asset)]
+      status, price, priceLabel, priceNote, stats, "gallery": gallery[defined(asset)]
     }`,
     {slug},
   )
@@ -70,7 +82,11 @@ export async function getGalleryImages(limit = 6): Promise<SanityImageSource[]> 
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
-  return client.fetch(`*[_type == "siteSettings"][0] { aboutPhoto, footerTagline }`)
+  return client.fetch(`*[_type == "siteSettings"][0] {
+    siteName, tagline, aboutPhoto, email, phone, phoneDisplay, address,
+    socialLinks, pricing, legal, footerTagline, footerNavTitle,
+    footerContactTitle, footerLegalTitle, defaultSeo
+  }`)
 }
 
 export async function getTestimonials(limit = 6): Promise<Testimonial[]> {
@@ -90,7 +106,7 @@ export async function getHomePage(): Promise<HomePage | null> {
 }
 
 export async function getFaqPage(): Promise<FaqPage | null> {
-  return client.fetch(`*[_type == "faqPage"][0] { sectionLabel, introText, items }`)
+  return client.fetch(`*[_type == "faqPage"][0] { sectionLabel, introText, items, seo }`)
 }
 
 export async function getArticles(): Promise<Article[]> {
@@ -115,4 +131,34 @@ export async function getArticleSlugs(): Promise<{slug: string}[]> {
     `*[_type == "article" && defined(slug.current)] { slug }`,
   )
   return articles.map((article) => ({slug: article.slug.current}))
+}
+
+export async function getCatsPage(): Promise<CatsPage | null> {
+  return client.fetch(`*[_type == "catsPage"][0] {
+    sectionLabel, titlePrefix, titleEmphasis, titleSuffix, introText,
+    malesTitle, malesEmptyText, femalesTitle, femalesEmptyText, seo
+  }`)
+}
+
+export async function getLittersPage(): Promise<LittersPage | null> {
+  return client.fetch(`*[_type == "littersPage"][0] {
+    sectionLabel, titlePrefix, titleEmphasis, titleSuffix, introText,
+    emptyText, waitingListText, seo
+  }`)
+}
+
+export async function getContactPage(): Promise<ContactPage | null> {
+  return client.fetch(`*[_type == "contactPage"][0] {
+    sectionLabel, titlePrefix, titleEmphasis, titleSuffix, introText,
+    termsTitle, formIntro, submitLabel, successMessage, errorMessage, seo
+  }`)
+}
+
+export async function getLegalPage(id: string): Promise<LegalPage | null> {
+  return client.fetch(
+    `*[_type == "legalPage" && _id == $id][0] {
+      title, sectionLabel, updatedAt, body, seo
+    }`,
+    {id},
+  )
 }
