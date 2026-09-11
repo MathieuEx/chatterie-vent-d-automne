@@ -3,6 +3,7 @@
 import { useState, type SubmitEvent } from "react";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { submitContactForm } from "@/lib/contact-submit";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -31,16 +32,12 @@ export default function ContactForm({
     event.preventDefault();
 
     const form = event.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
 
     setStatus("submitting");
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
+      const ok = await submitContactForm(data);
+      if (ok) {
         setStatus("success");
         form.reset();
       } else {
@@ -61,6 +58,9 @@ export default function ContactForm({
           <input name="bot-field" tabIndex={-1} autoComplete="off" />
         </label>
       </p>
+
+      {/* Indique dans quelle langue le visiteur a rempli le formulaire. */}
+      <input type="hidden" name="locale" value={locale} />
 
       <div className="form-grid">
         <div className="form-group">

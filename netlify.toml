@@ -1,0 +1,31 @@
+# Déploiement du front-end sur Netlify.
+#
+# Le dépôt contient deux projets Node indépendants (web/ et studio/) ; seul
+# `web` est déployé ici. `base` place Netlify dans ce dossier, et les chemins
+# ci-dessous sont donc relatifs à web/.
+#
+# Le Studio Sanity n'est pas concerné : il est hébergé par Sanity
+# (chatterie-vents-dautomne.sanity.studio) et se déploie avec `npm run deploy`
+# depuis studio/.
+
+[build]
+  base = "web"
+  command = "npm run build"
+  publish = ".next"
+
+# Adaptateur officiel Next.js (OpenNext). Netlify l'installe automatiquement
+# quand il détecte Next.js, mais le déclarer rend le déploiement reproductible
+# plutôt que dépendant de la détection.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  # Aligne l'environnement de build sur la version utilisée en local.
+  NODE_VERSION = "22"
+
+# Le Studio Sanity appelle le site depuis un autre domaine ; sans cet en-tête,
+# le navigateur bloquerait la requête de rafraîchissement du contenu.
+[[headers]]
+  for = "/api/revalidate"
+  [headers.values]
+    Access-Control-Allow-Origin = "https://chatterie-vents-dautomne.sanity.studio"
