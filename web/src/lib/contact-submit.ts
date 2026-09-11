@@ -41,5 +41,18 @@ export async function submitContactForm(
     body: body.toString(),
   });
 
+  if (!res.ok) {
+    // Sans cette trace, un échec ne laissait aucun indice : le visiteur voyait
+    // un message d'erreur générique et la console restait muette. Les deux
+    // causes courantes se distinguent par le code renvoyé.
+    const hint =
+      res.status === 404
+        ? "formulaire non enregistré — activer « Form detection » dans Netlify puis redéployer"
+        : res.status === 405
+          ? "requête interceptée par Next.js au lieu de Netlify Forms"
+          : "réponse inattendue de Netlify";
+    console.error(`[contact] Envoi refusé (HTTP ${res.status}) : ${hint}`);
+  }
+
   return res.ok;
 }
