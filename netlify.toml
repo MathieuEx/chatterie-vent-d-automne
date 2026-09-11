@@ -23,6 +23,14 @@
   # Aligne l'environnement de build sur la version utilisée en local.
   NODE_VERSION = "22"
 
+  # Netlify fait échouer le build s'il retrouve la valeur d'une variable
+  # d'environnement dans les fichiers produits. Or le préfixe `NEXT_PUBLIC_`
+  # signifie précisément « à intégrer au JavaScript envoyé au navigateur » :
+  # ces valeurs sont publiques par construction (l'identifiant de projet Sanity
+  # figure déjà dans l'URL de chaque image du site). Sans cette liste, le
+  # déploiement échouerait sur une fausse alerte de secret exposé.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SANITY_PROJECT_ID,NEXT_PUBLIC_SANITY_DATASET,NEXT_PUBLIC_SANITY_API_VERSION,NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_CONTACT_PROVIDER"
+
 # Le Studio Sanity appelle le site depuis un autre domaine ; sans cet en-tête,
 # le navigateur bloquerait la requête de rafraîchissement du contenu.
 [[headers]]
