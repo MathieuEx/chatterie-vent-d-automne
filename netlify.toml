@@ -37,3 +37,29 @@
   for = "/api/revalidate"
   [headers.values]
     Access-Control-Allow-Origin = "https://chatterie-vents-dautomne.sanity.studio"
+
+# ── Domaine secondaire ──────────────────────────────────────────────────────
+#
+# Le .fr renvoie vers le .com, qui est le domaine principal. Netlify ne le fait
+# pas tout seul : un domaine secondaire rattaché au site y sert le même contenu
+# sans redirection, et Google verrait alors deux sites identiques — du contenu
+# dupliqué, qui dilue le référencement entre les deux adresses.
+#
+# Ces règles ne s'appliquent que si ventsdautomne.fr pointe bien vers Netlify et
+# y est déclaré comme domaine secondaire. Tant que son DNS envoie ailleurs, la
+# requête n'atteint jamais Netlify et la redirection reste lettre morte.
+#
+# `:splat` conserve le chemin demandé (…fr/contact → …com/contact) et
+# `force = true` applique la redirection même si la page existe déjà côté .fr.
+
+[[redirects]]
+  from = "https://ventsdautomne.fr/*"
+  to = "https://ventsdautomne.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.ventsdautomne.fr/*"
+  to = "https://ventsdautomne.com/:splat"
+  status = 301
+  force = true
