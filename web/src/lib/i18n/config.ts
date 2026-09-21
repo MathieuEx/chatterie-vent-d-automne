@@ -18,6 +18,7 @@ const ROUTES = {
   contact: { fr: "/contact", en: "/en/contact" },
   legalNotice: { fr: "/mentions-legales", en: "/mentions-legales" },
   privacy: { fr: "/politique-de-confidentialite", en: "/politique-de-confidentialite" },
+  saleTerms: { fr: "/conditions-generales-vente", en: "/conditions-generales-vente" },
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

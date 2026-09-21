@@ -82,6 +82,9 @@ export default async function Footer({ locale }: { locale: Locale }) {
               <Link href={route("privacy", locale)} lang="fr">
                 {t.privacy}
               </Link>
+              <Link href={route("saleTerms", locale)} lang="fr">
+                {t.saleTerms}
+              </Link>
             </div>
           </div>
         </div>
@@ -100,6 +103,9 @@ export default async function Footer({ locale }: { locale: Locale }) {
             </Link>
             <Link href={route("privacy", locale)} lang="fr">
               {t.privacyShort}
+            </Link>
+            <Link href={route("saleTerms", locale)} lang="fr">
+              {t.saleTermsShort}
             </Link>
           </div>
         </div>

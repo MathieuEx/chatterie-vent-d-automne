@@ -80,6 +80,8 @@ const DICTIONARY = {
       legalNotice: "Mentions légales",
       privacy: "Politique de confidentialité",
       privacyShort: "Confidentialité",
+      saleTerms: "Conditions générales de vente",
+      saleTermsShort: "CGV",
       mediator: "Médiateur",
       tagline:
         "Élevage familial de chats Ragdoll à Toulouse, dans le respect de la santé et du bien-être de nos chats.",
@@ -164,6 +166,8 @@ const DICTIONARY = {
       legalNotice: "Legal notice",
       privacy: "Privacy policy",
       privacyShort: "Privacy",
+      saleTerms: "Terms of sale",
+      saleTermsShort: "Terms of sale",
       mediator: "Mediator",
       tagline:
         "A family-run Ragdoll cattery in Toulouse, France, devoted to the health and wellbeing of our cats.",

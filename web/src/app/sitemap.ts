@@ -95,5 +95,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.2,
     },
+    {
+      url: `${SITE_URL}${route("saleTerms", "fr")}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.2,
+    },
   ];
 }

@@ -86,6 +86,13 @@ const documents = [
     sectionLabel: 'Vos données',
     updatedAt: '2026-06-30',
   },
+  {
+    _id: 'conditionsGeneralesVente',
+    _type: 'legalPage',
+    title: 'Conditions générales de vente',
+    sectionLabel: 'Réservation, acompte et remboursement',
+    updatedAt: '2026-09-21',
+  },
 ]
 
 /** Nouveaux champs de siteSettings, alignés sur ce qu'affiche le site. */
