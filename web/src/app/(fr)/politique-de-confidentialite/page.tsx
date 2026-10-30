@@ -5,8 +5,6 @@ import { getLegalPage } from "@/lib/sanity/queries";
 const FALLBACK_TITLE = "Politique de confidentialité | La Chatterie des Vents d'Automne";
 const FALLBACK_DESCRIPTION = "Politique de confidentialité de La Chatterie des Vents d'Automne : données collectées via le formulaire de contact, finalités, durée de conservation et droits RGPD.";
 
-export const revalidate = 3600;
-
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getLegalPage("politiqueConfidentialite");
   return {
@@ -126,10 +124,10 @@ export default async function PolitiqueConfidentialitePage() {
           <p>
             Lorsque vous soumettez le formulaire, vos données sont transmises par email à{" "}
             <strong>Amélie</strong>, gérante de La Chatterie des Vents d&apos;Automne, seule
-            destinataire de vos messages. L&apos;envoi de cet email s&apos;appuie techniquement sur
-            les services de messagerie <strong>Google (Gmail)</strong> et sur l&apos;hébergeur du
-            site, <strong>Vercel Inc.</strong>, qui traite la requête le temps de l&apos;envoi sans
-            conservation additionnelle de votre part. Vos données ne sont jamais vendues, louées,
+            destinataire de vos messages. L&apos;envoi s&apos;appuie techniquement sur le service{" "}
+            <strong>Web3Forms</strong> (web3forms.com), qui reçoit le contenu du formulaire et le
+            relaie par email, puis sur la messagerie <strong>Google (Gmail)</strong> où il est
+            reçu. Vos données ne sont jamais vendues, louées,
             ni transmises à des tiers à des fins commerciales ou publicitaires.
           </p>
 

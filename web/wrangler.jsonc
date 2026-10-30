@@ -1,0 +1,18 @@
+// Déploiement sur Cloudflare Workers (Settings → Builds, deploy command :
+// `npx wrangler deploy`).
+//
+// Le site est un export statique : aucun code ne tourne côté Cloudflare, le
+// Worker sert seulement les fichiers produits par `npm run build` dans `out/`.
+// Les fichiers `_headers` de public/ sont appliqués tels quels.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Doit être identique au nom du Worker dans le tableau de bord, sinon
+  // Cloudflare refuse le déploiement.
+  "name": "chatterie-vent-d-automne",
+  "compatibility_date": "2026-10-30",
+  "assets": {
+    "directory": "./out",
+    // Une adresse inconnue reçoit la page 404 du site plutôt qu'une erreur brute.
+    "not_found_handling": "404-page"
+  }
+}

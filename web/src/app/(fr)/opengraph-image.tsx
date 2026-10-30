@@ -7,6 +7,10 @@ export const alt = SITE_CONFIG.name;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Générée une fois au build : l'export statique n'a pas de serveur pour la
+// produire à la demande.
+export const dynamic = "force-static";
+
 export default async function Image() {
   const logo = await readFile(join(process.cwd(), "public/logo.png"));
   const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;

@@ -1,0 +1,7 @@
+# En-têtes HTTP appliqués par Cloudflare Pages au site statique.
+#
+# L'image d'aperçu (opengraph-image.tsx) est exportée sans extension : sans type
+# déclaré, Cloudflare la servirait comme fichier binaire générique et Facebook,
+# WhatsApp ou iMessage n'afficheraient pas l'aperçu des liens partagés.
+/opengraph-image-*
+  Content-Type: image/png

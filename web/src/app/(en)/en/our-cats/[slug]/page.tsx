@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import CatDetailView, { catMetadata, catSlugParams } from "@/views/CatDetailView";
 
-export const revalidate = 3600;
-
 export async function generateStaticParams() {
   return catSlugParams();
 }

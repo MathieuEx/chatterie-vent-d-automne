@@ -5,8 +5,6 @@ import { getLegalPage } from "@/lib/sanity/queries";
 const FALLBACK_TITLE = "Mentions légales | La Chatterie des Vents d'Automne - Ragdoll Toulouse";
 const FALLBACK_DESCRIPTION = "Mentions légales de La Chatterie des Vents d'Automne, élevage de chats Ragdoll à Toulouse.";
 
-export const revalidate = 3600;
-
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getLegalPage("mentionsLegales");
   return {
@@ -105,13 +103,13 @@ export default async function MentionsLegalesPage() {
           </p>
           <ul>
             <li>
-              <strong>Vercel Inc.</strong>
+              <strong>Cloudflare, Inc.</strong>
             </li>
-            <li>340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis</li>
+            <li>101 Townsend St, San Francisco, CA 94107, États-Unis</li>
             <li>
               Site web :{" "}
-              <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">
-                vercel.com
+              <a href="https://www.cloudflare.com" target="_blank" rel="noopener noreferrer">
+                cloudflare.com
               </a>
             </li>
           </ul>

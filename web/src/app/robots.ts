@@ -1,6 +1,10 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site-config";
 
+// Généré une fois au build : l'export statique n'a pas de serveur pour le
+// produire à la demande.
+export const dynamic = "force-static";
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {

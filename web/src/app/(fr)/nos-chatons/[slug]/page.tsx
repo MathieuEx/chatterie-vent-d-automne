@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import KittenDetailView, { litterMetadata, litterSlugParams } from "@/views/KittenDetailView";
 
-export const revalidate = 3600;
-
 export async function generateStaticParams() {
   return litterSlugParams();
 }
