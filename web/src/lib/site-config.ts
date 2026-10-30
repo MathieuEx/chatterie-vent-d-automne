@@ -2,22 +2,16 @@
  * Adresse publique du site, utilisée par le sitemap, robots.txt, les balises
  * canoniques, hreflang et la fiche établissement JSON-LD.
  *
- * Ordre de repli :
- *  1. `NEXT_PUBLIC_SITE_URL` — le domaine définitif, une fois qu'il existe.
- *  2. `CF_PAGES_URL` — fourni automatiquement par Cloudflare Pages au build
- *     (ex. https://xxx.chatterie.pages.dev).
- *     Sans lui, tant que le domaine n'est pas acheté, le site déclarerait à
- *     Google une adresse qui ne résout pas, et rien ne serait indexable.
- *  3. Le domaine prévu, en dernier recours (une URL valide est obligatoire
- *     pour `metadataBase`).
+ * `NEXT_PUBLIC_SITE_URL` (réglée dans les variables de build Cloudflare), avec
+ * le domaine principal en repli : une URL valide est obligatoire pour
+ * `metadataBase`.
  *
  * `||` et non `??` : une variable définie mais vide doit aussi basculer sur le
- * repli suivant.
+ * repli.
  */
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
-  process.env.CF_PAGES_URL ||
-  "https://www.chatterie-vents-dautomne.fr";
+  "https://ventsdautomne.com";
 
 export const SITE_NAME = "La Chatterie des Vents d'Automne";
 

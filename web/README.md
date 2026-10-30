@@ -29,23 +29,24 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Déploiement (Cloudflare Pages)
+## Déploiement (Cloudflare Workers)
 
 Le site est un export statique (`output: "export"`) : `npm run build` produit le
-dossier `out/`, servi tel quel par Cloudflare Pages. Le Studio Sanity n'est pas
-concerné : il est hébergé par Sanity et se déploie avec `npm run deploy` depuis
-`studio/`.
+dossier `out/`, que le Worker `chatterie-vent-d-automne` sert tel quel (voir
+`wrangler.jsonc`). Le Studio Sanity n'est pas concerné : il est hébergé par
+Sanity et se déploie avec `npm run deploy` depuis `studio/`.
 
-**Réglages du projet Pages** (Workers & Pages → Create → Pages → Connect to Git) :
+**Réglages du Worker** (Workers & Pages → chatterie-vent-d-automne → Settings → Builds) :
 
 | Réglage | Valeur |
 |---|---|
 | Root directory | `web` |
 | Build command | `npm run build` |
-| Build output directory | `out` |
+| Deploy command | `npx wrangler deploy` |
 
-**Variables d'environnement** (Settings → Variables and Secrets), à déclarer
-pour la production et les prévisualisations :
+**Variables d'environnement** : dans le bloc *Variables and secrets* de
+**Settings → Builds** (et non dans *Runtime variables*, qui ne servent qu'à
+l'exécution d'un Worker — ici il n'y en a pas) :
 
 - `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`
 - `NEXT_PUBLIC_SITE_URL` — le domaine définitif (`https://ventsdautomne.com`)
@@ -58,14 +59,14 @@ après en avoir modifié une, il faut redéployer.
 **Mise à jour du contenu.** Les pages sont figées au build. Pour qu'une
 publication dans Sanity apparaisse sur le site :
 
-1. Cloudflare Pages → Settings → Builds → Deploy hooks : créer un hook (branche `main`).
+1. Worker → Settings → Builds → Deploy hooks : créer un hook (branche `main`).
 2. Sanity → Manage → API → Webhooks : coller l'URL du hook, trigger Create / Update / Delete.
 
 Comptez une à deux minutes entre la publication et la mise en ligne.
 
 **Domaine secondaire.** `ventsdautomne.fr` doit renvoyer vers `ventsdautomne.com`
 (sinon Google voit deux sites identiques et le référencement se dilue). Cloudflare
-Pages ne le fait pas via un fichier du dépôt : créer, dans la zone `ventsdautomne.fr`
+ne le fait pas via un fichier du dépôt : créer, dans la zone `ventsdautomne.fr`
 de Cloudflare, une *Redirect Rule* « tous les hôtes `ventsdautomne.fr` et
 `www.ventsdautomne.fr` » → `https://ventsdautomne.com` + chemin conservé, code 301.
 La règle ne s'applique qu'au trafic qui passe par Cloudflare : les enregistrements
