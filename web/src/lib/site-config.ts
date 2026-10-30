@@ -4,7 +4,8 @@
  *
  * Ordre de repli :
  *  1. `NEXT_PUBLIC_SITE_URL` — le domaine définitif, une fois qu'il existe.
- *  2. `URL` — fourni automatiquement par Netlify (ex. https://xxx.netlify.app).
+ *  2. `CF_PAGES_URL` — fourni automatiquement par Cloudflare Pages au build
+ *     (ex. https://xxx.chatterie.pages.dev).
  *     Sans lui, tant que le domaine n'est pas acheté, le site déclarerait à
  *     Google une adresse qui ne résout pas, et rien ne serait indexable.
  *  3. Le domaine prévu, en dernier recours (une URL valide est obligatoire
@@ -15,7 +16,7 @@
  */
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
-  process.env.URL ||
+  process.env.CF_PAGES_URL ||
   "https://www.chatterie-vents-dautomne.fr";
 
 export const SITE_NAME = "La Chatterie des Vents d'Automne";

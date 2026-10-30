@@ -3,6 +3,10 @@ import { SITE_URL } from "@/lib/site-config";
 import { getArticleSlugs, getCatSlugs, getLitterSlugs } from "@/lib/sanity/queries";
 import { detailRoute, route, type RouteKey } from "@/lib/i18n/config";
 
+// Généré une fois au build : l'export statique n'a pas de serveur pour le
+// produire à la demande.
+export const dynamic = "force-static";
+
 /**
  * Chaque page est déclarée dans les deux langues, et chaque entrée porte les
  * `alternates.languages` de l'autre version : c'est ce qui indique à Google

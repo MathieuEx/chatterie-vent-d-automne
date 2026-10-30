@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import NewsDetailView, { articleMetadata, articleSlugParams } from "@/views/NewsDetailView";
 
-export const revalidate = 3600;
-
 export async function generateStaticParams() {
   return articleSlugParams();
 }

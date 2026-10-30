@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import KittensView, { kittensMetadata } from "@/views/KittensView";
 
-export const revalidate = 3600;
-
 export const generateMetadata = (): Promise<Metadata> => kittensMetadata("fr");
 
 export default function Page() {

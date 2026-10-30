@@ -7,8 +7,6 @@ const FALLBACK_TITLE =
 const FALLBACK_DESCRIPTION =
   "Conditions générales de vente de La Chatterie des Vents d'Automne : réservation, acompte, remboursement, remise du chaton et garanties.";
 
-export const revalidate = 3600;
-
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getLegalPage("conditionsGeneralesVente");
   return {
