@@ -13,7 +13,7 @@ const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 if (!PROJECT_ID) {
   throw new Error(
     "NEXT_PUBLIC_SANITY_PROJECT_ID est absent. Renseignez-le dans web/.env en local, " +
-      'et dans Cloudflare Pages → Settings → Variables and Secrets en production.',
+      'et dans le Worker Cloudflare → Settings → Builds → Variables and Secrets en production.',
   )
 }
 
